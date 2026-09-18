@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body>
+<div id="app"></div>
+<script src="http://localhost:8080/assets/js/bundle.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  
+(() => {
+  const app = new GeethaApp();
+  console.log('INITIAL ROUTE:', app.currentRoute);
+  
+  // Test navigation to chapters
+  app.navigate('chapters');
+  const chGrid = document.querySelector('#chapters-grid');
+  console.log('CHAPTERS COUNT:', chGrid ? chGrid.children.length : 0);
+  
+  // Test navigation to chapter detail (Chapter 2)
+  app.navigate('chapterDetail', { chapterNumber: 2 });
+  const vMount = document.querySelector('#chapter-verses-mount');
+  console.log('CH 2 VERSES COUNT:', vMount ? vMount.children.length : 0);
+  
+  // Test navigation to verse detail (Verse 2.47)
+  app.navigate('verseDetail', { chapterNumber: 2, verseNumber: 47 });
+  const h1 = document.querySelector('h1');
+  console.log('VERSE DETAIL TITLE:', h1 ? h1.innerText : 'none');
+  
+  // Test navigation to verse detail (Verse 18.78)
+  app.navigate('verseDetail', { chapterNumber: 18, verseNumber: 78 });
+  const h1_18 = document.querySelector('h1');
+  console.log('VERSE 18.78 TITLE:', h1_18 ? h1_18.innerText : 'none');
+})();
+
+});
+</script>
+</body>
+</html>

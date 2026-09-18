@@ -1,0 +1,260 @@
+[
+  {
+    "intent": "fear_of_failure",
+    "description": "Fear Of Failure",
+    "primary_verse": "2.47",
+    "verse_count": 4
+  },
+  {
+    "intent": "exam_stress",
+    "description": "Exam Stress",
+    "primary_verse": "2.47",
+    "verse_count": 4
+  },
+  {
+    "intent": "general_stress",
+    "description": "General Stress",
+    "primary_verse": "2.14",
+    "verse_count": 4
+  },
+  {
+    "intent": "anxiety",
+    "description": "Anxiety",
+    "primary_verse": "2.14",
+    "verse_count": 4
+  },
+  {
+    "intent": "anger_control",
+    "description": "Anger Control",
+    "primary_verse": "2.62",
+    "verse_count": 4
+  },
+  {
+    "intent": "sadness",
+    "description": "Sadness",
+    "primary_verse": "2.11",
+    "verse_count": 4
+  },
+  {
+    "intent": "grief",
+    "description": "Grief",
+    "primary_verse": "2.11",
+    "verse_count": 4
+  },
+  {
+    "intent": "heartbreak",
+    "description": "Heartbreak",
+    "primary_verse": "2.14",
+    "verse_count": 4
+  },
+  {
+    "intent": "relationship_conflict",
+    "description": "Relationship Conflict",
+    "primary_verse": "3.16",
+    "verse_count": 4
+  },
+  {
+    "intent": "career_confusion",
+    "description": "Career Confusion",
+    "primary_verse": "3.35",
+    "verse_count": 4
+  },
+  {
+    "intent": "decision_making",
+    "description": "Decision Making",
+    "primary_verse": "16.18",
+    "verse_count": 4
+  },
+  {
+    "intent": "success",
+    "description": "Success",
+    "primary_verse": "2.47",
+    "verse_count": 4
+  },
+  {
+    "intent": "failure",
+    "description": "Failure",
+    "primary_verse": "2.47",
+    "verse_count": 4
+  },
+  {
+    "intent": "motivation",
+    "description": "Motivation",
+    "primary_verse": "2.47",
+    "verse_count": 4
+  },
+  {
+    "intent": "discipline",
+    "description": "Discipline",
+    "primary_verse": "6.16",
+    "verse_count": 4
+  },
+  {
+    "intent": "focus",
+    "description": "Focus",
+    "primary_verse": "6.25",
+    "verse_count": 4
+  },
+  {
+    "intent": "mind_control",
+    "description": "Mind Control",
+    "primary_verse": "6.5",
+    "verse_count": 4
+  },
+  {
+    "intent": "self_control",
+    "description": "Self Control",
+    "primary_verse": "6.5",
+    "verse_count": 4
+  },
+  {
+    "intent": "attachment",
+    "description": "Attachment",
+    "primary_verse": "2.62",
+    "verse_count": 4
+  },
+  {
+    "intent": "desire",
+    "description": "Desire",
+    "primary_verse": "3.37",
+    "verse_count": 4
+  },
+  {
+    "intent": "jealousy",
+    "description": "Jealousy",
+    "primary_verse": "3.30",
+    "verse_count": 4
+  },
+  {
+    "intent": "ego",
+    "description": "Ego",
+    "primary_verse": "3.27",
+    "verse_count": 4
+  },
+  {
+    "intent": "duty",
+    "description": "Duty",
+    "primary_verse": "3.35",
+    "verse_count": 4
+  },
+  {
+    "intent": "dharma",
+    "description": "Dharma",
+    "primary_verse": "2.31",
+    "verse_count": 4
+  },
+  {
+    "intent": "karma",
+    "description": "Karma",
+    "primary_verse": "3.9",
+    "verse_count": 4
+  },
+  {
+    "intent": "detachment",
+    "description": "Detachment",
+    "primary_verse": "2.47",
+    "verse_count": 4
+  },
+  {
+    "intent": "meditation",
+    "description": "Meditation",
+    "primary_verse": "6.10",
+    "verse_count": 4
+  },
+  {
+    "intent": "devotion",
+    "description": "Devotion",
+    "primary_verse": "9.26",
+    "verse_count": 4
+  },
+  {
+    "intent": "purpose_of_life",
+    "description": "Purpose Of Life",
+    "primary_verse": "3.35",
+    "verse_count": 4
+  },
+  {
+    "intent": "death",
+    "description": "Death",
+    "primary_verse": "2.19",
+    "verse_count": 4
+  },
+  {
+    "intent": "soul",
+    "description": "Soul",
+    "primary_verse": "2.20",
+    "verse_count": 4
+  },
+  {
+    "intent": "rebirth",
+    "description": "Rebirth",
+    "primary_verse": "4.5",
+    "verse_count": 4
+  },
+  {
+    "intent": "liberation",
+    "description": "Liberation",
+    "primary_verse": "18.66",
+    "verse_count": 4
+  },
+  {
+    "intent": "knowledge",
+    "description": "Knowledge",
+    "primary_verse": "4.33",
+    "verse_count": 4
+  },
+  {
+    "intent": "peace",
+    "description": "Peace",
+    "primary_verse": "2.70",
+    "verse_count": 4
+  },
+  {
+    "intent": "responsibility",
+    "description": "Responsibility",
+    "primary_verse": "3.21",
+    "verse_count": 4
+  },
+  {
+    "intent": "leadership",
+    "description": "Leadership",
+    "primary_verse": "3.21",
+    "verse_count": 4
+  },
+  {
+    "intent": "criticism",
+    "description": "Criticism",
+    "primary_verse": "12.19",
+    "verse_count": 4
+  },
+  {
+    "intent": "rejection",
+    "description": "Rejection",
+    "primary_verse": "2.14",
+    "verse_count": 4
+  },
+  {
+    "intent": "loneliness",
+    "description": "Loneliness",
+    "primary_verse": "6.7",
+    "verse_count": 4
+  },
+  {
+    "intent": "uncertainty",
+    "description": "Uncertainty",
+    "primary_verse": "18.66",
+    "verse_count": 4
+  },
+  {
+    "intent": "out_of_domain",
+    "description": "Questions unrelated to the Gita",
+    "primary_verse": "",
+    "verse_count": 0
+  },
+  {
+    "intent": "needs_clarification",
+    "description": "Ambiguous questions needing follow-up",
+    "primary_verse": "",
+    "verse_count": 0
+  }
+]

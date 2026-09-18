@@ -1,0 +1,6 @@
+source_name,source_url,source_type,license,date_collected,data_used,notes
+Geetha GPT Project Dataset,d:/Geetha/assets/js/data/chapter*.js,Project-internal,Sanskrit text = ancient public domain; translations = project-maintained,2026-09-01,"700 verses with Sanskrit, English, Telugu, topics, practical applications",Primary source. All 700 verses with full bilingual content.
+gita/gita GitHub Repository,https://github.com/gita/gita,Open Source / MIT License,MIT,2026-09-01,Cross-reference for verse numbering and Sanskrit text verification,"Used for structural verification only, not bulk content copy."
+vedicscriptures/bhagavad-gita-api,https://github.com/vedicscriptures/bhagavad-gita-api,Open Source,Check repository LICENSE file,2026-09-01,Reference for API structure and data schema,Consulted for data schema reference only.
+IIT Kanpur Gita Supersite,https://www.gitasupersite.iitk.ac.in,Academic/Public,Educational use; not explicitly open-license — used for verification only,2026-09-01,Chapter/verse count and Sanskrit verification,Used as authoritative reference for chapter/verse structure. No bulk content copied.
+Geetha GPT Training Questions,N/A — original authorship,Original Content,CC0 / Project-internal,2026-09-01,All Q&A training examples,All training questions and answers were written originally for this dataset. Not copied from external sources.

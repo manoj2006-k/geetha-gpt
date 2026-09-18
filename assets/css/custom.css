@@ -1,0 +1,336 @@
+/* ==========================================================================
+   Geetha GPT - Custom Styles & Spiritual Aesthetics
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Cinzel+Decorative:wght@700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@400;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  --bg-cream: #FAF7F2;
+  --bg-surface: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --border-subtle: #EBE5DC;
+  --text-primary: #292524;
+  --text-secondary: #57534E;
+  --text-muted: #8E887F;
+  --saffron-primary: #D97706;
+  --saffron-hover: #B45309;
+  --saffron-glow: rgba(217, 119, 6, 0.2);
+  --gold-accent: #F59E0B;
+  --gold-subtle: #FEF3C7;
+  --diya-light: rgba(245, 158, 11, 0.15);
+}
+
+.dark {
+  --bg-cream: #121110;
+  --bg-surface: #1A1816;
+  --bg-card: #201D1A;
+  --border-subtle: #332F2B;
+  --text-primary: #F5F0E6;
+  --text-secondary: #C4BCB3;
+  --text-muted: #7C756D;
+  --saffron-primary: #F59E0B;
+  --saffron-hover: #FBBF24;
+  --saffron-glow: rgba(245, 158, 11, 0.25);
+  --gold-accent: #FCD34D;
+  --gold-subtle: #2D2418;
+  --diya-light: rgba(245, 158, 11, 0.1);
+}
+
+/* Font Families */
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+.font-cinzel-dec {
+  font-family: 'Cinzel Decorative', cursive, serif;
+}
+
+.font-sanskrit {
+  font-family: 'Noto Serif Devanagari', serif;
+}
+
+.font-telugu {
+  font-family: 'Noto Sans Telugu', sans-serif;
+}
+
+.font-devanagari {
+  font-family: 'Noto Sans Devanagari', 'Noto Serif Devanagari', sans-serif;
+}
+
+.font-tamil {
+  font-family: 'Noto Sans Tamil', sans-serif;
+}
+
+.font-kannada {
+  font-family: 'Noto Sans Kannada', sans-serif;
+}
+
+.font-malayalam {
+  font-family: 'Noto Sans Malayalam', sans-serif;
+}
+
+.font-bengali {
+  font-family: 'Noto Sans Bengali', sans-serif;
+}
+
+.font-gujarati {
+  font-family: 'Noto Sans Gujarati', sans-serif;
+}
+
+.font-gurmukhi {
+  font-family: 'Noto Sans Gurmukhi', sans-serif;
+}
+
+.font-odia {
+  font-family: 'Noto Sans Oriya', sans-serif;
+}
+
+.font-arabic {
+  font-family: 'Noto Sans Arabic', 'Tahoma', sans-serif;
+}
+
+.font-meitei {
+  font-family: 'Noto Sans Meetei Mayek', sans-serif;
+}
+
+.font-olchiki {
+  font-family: 'Noto Sans Ol Chiki', sans-serif;
+}
+
+/* Script-aware Language Classes */
+.lang-hi, .lang-mr, .lang-sa, .lang-kok, .lang-mai, .lang-ne, .lang-brx, .lang-doi, .lang-ks {
+  font-family: 'Noto Sans Devanagari', 'Noto Serif Devanagari', sans-serif;
+}
+.lang-te { font-family: 'Noto Sans Telugu', sans-serif; }
+.lang-ta { font-family: 'Noto Sans Tamil', sans-serif; }
+.lang-kn { font-family: 'Noto Sans Kannada', sans-serif; }
+.lang-ml { font-family: 'Noto Sans Malayalam', sans-serif; }
+.lang-bn, .lang-as { font-family: 'Noto Sans Bengali', sans-serif; }
+.lang-gu { font-family: 'Noto Sans Gujarati', sans-serif; }
+.lang-pa { font-family: 'Noto Sans Gurmukhi', sans-serif; }
+.lang-or { font-family: 'Noto Sans Oriya', sans-serif; }
+.lang-ur, .lang-sd { font-family: 'Noto Sans Arabic', 'Tahoma', sans-serif; }
+.lang-mni { font-family: 'Noto Sans Meetei Mayek', 'Noto Sans Bengali', sans-serif; }
+.lang-sat { font-family: 'Noto Sans Ol Chiki', sans-serif; }
+.lang-en { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-cream);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D97706;
+  border-radius: 9999px;
+  opacity: 0.5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B45309;
+}
+
+/* Subtle Spiritual Background Pattern */
+.bg-mandala-pattern {
+  background-image: radial-gradient(circle at 50% 50%, rgba(217, 119, 6, 0.04) 0%, transparent 70%);
+}
+
+.dark .bg-mandala-pattern {
+  background-image: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.05) 0%, transparent 70%);
+}
+
+/* Glowing Border & Shimmer Effects */
+.glow-saffron {
+  box-shadow: 0 0 25px -5px rgba(217, 119, 6, 0.25);
+}
+
+.glow-saffron-sm {
+  box-shadow: 0 0 12px -2px rgba(217, 119, 6, 0.2);
+}
+
+.dark .glow-saffron {
+  box-shadow: 0 0 30px -5px rgba(245, 158, 11, 0.3);
+}
+
+/* Shimmer animation for AI loading */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, rgba(217, 119, 6, 0.08) 25%, rgba(217, 119, 6, 0.2) 50%, rgba(217, 119, 6, 0.08) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite ease-in-out;
+}
+
+/* Pulse Glow */
+@keyframes pulse-glow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s infinite ease-in-out;
+}
+
+/* Smooth Page Transitions */
+.page-fade-in {
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Micro-animations */
+.hover-lift {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px);
+}
+
+/* Custom Diya Flame Flicker */
+@keyframes flameFlicker {
+  0%, 100% { transform: scale(1) rotate(-1deg); opacity: 0.95; }
+  25% { transform: scale(1.04) rotate(1deg); opacity: 1; }
+  50% { transform: scale(0.97) rotate(-2deg); opacity: 0.9; }
+  75% { transform: scale(1.02) rotate(2deg); opacity: 1; }
+}
+
+.animate-flame {
+  animation: flameFlicker 2.5s infinite ease-in-out;
+}
+
+/* Audio wave equalizer animation */
+@keyframes wavePulse {
+  0%, 100% { height: 6px; }
+  50% { height: 22px; }
+}
+
+.wave-bar:nth-child(1) { animation: wavePulse 1s infinite ease-in-out 0.1s; }
+.wave-bar:nth-child(2) { animation: wavePulse 1.2s infinite ease-in-out 0.3s; }
+.wave-bar:nth-child(3) { animation: wavePulse 0.9s infinite ease-in-out 0.2s; }
+.wave-bar:nth-child(4) { animation: wavePulse 1.1s infinite ease-in-out 0.4s; }
+
+/* Text clamp helpers */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   RTL (Right-To-Left) Support for Urdu, Sindhi, Kashmiri
+   ========================================================================== */
+html[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .sidebar-nav {
+  right: 0;
+  left: auto;
+  border-left-width: 1px;
+  border-right-width: 0;
+}
+
+html[dir="rtl"] .lg\:pl-68 {
+  padding-left: 1rem;
+  padding-right: 17rem;
+}
+
+@media (max-width: 1023px) {
+  html[dir="rtl"] .lg\:pl-68 {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+html[dir="rtl"] .chat-user-bubble {
+  border-bottom-right-radius: 1.5rem;
+  border-bottom-left-radius: 0.375rem;
+  align-self: flex-start;
+}
+
+html[dir="rtl"] .chat-assistant-bubble {
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 0.375rem;
+  align-self: flex-end;
+}
+
+html[dir="rtl"] .icon-flip {
+  transform: scaleX(-1);
+}
+
+/* RTL: Main canvas layout shift */
+html[dir="rtl"] .lg\:pl-64 {
+  padding-left: 0;
+  padding-right: 16rem; /* 256px = 64 * 4px */
+}
+
+/* RTL: Search bar icon position */
+html[dir="rtl"] .search-icon-start {
+  right: 0.75rem;
+  left: auto;
+}
+
+/* RTL: Flex row direction overrides */
+html[dir="rtl"] .flex-rtl-row {
+  flex-direction: row-reverse;
+}
+
+/* RTL: Verse card alignment */
+html[dir="rtl"] .verse-card-text {
+  text-align: right;
+}
+
+/* RTL: Bottom nav safe area stays centered */
+html[dir="rtl"] .fixed.bottom-0 {
+  direction: rtl;
+}
+
+/* Language Modal RTL awareness */
+html[dir="rtl"] .lang-modal-item {
+  flex-direction: row-reverse;
+  text-align: right;
+}

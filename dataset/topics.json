@@ -1,0 +1,98 @@
+[
+  {
+    "id": "dharma",
+    "name": "Duty & Righteousness",
+    "telugu": "ధర్మం",
+    "chapters": [
+      1,
+      2,
+      3,
+      18
+    ]
+  },
+  {
+    "id": "karma",
+    "name": "Action & Karma",
+    "telugu": "కర్మ",
+    "chapters": [
+      3,
+      4,
+      5,
+      18
+    ]
+  },
+  {
+    "id": "jnana",
+    "name": "Knowledge & Wisdom",
+    "telugu": "జ్ఞానం",
+    "chapters": [
+      4,
+      13
+    ]
+  },
+  {
+    "id": "bhakti",
+    "name": "Devotion",
+    "telugu": "భక్తి",
+    "chapters": [
+      9,
+      12
+    ]
+  },
+  {
+    "id": "yoga",
+    "name": "Yoga & Meditation",
+    "telugu": "యోగం",
+    "chapters": [
+      6
+    ]
+  },
+  {
+    "id": "atman",
+    "name": "Soul & Self",
+    "telugu": "ఆత్మ",
+    "chapters": [
+      2,
+      13,
+      15
+    ]
+  },
+  {
+    "id": "moksha",
+    "name": "Liberation",
+    "telugu": "మోక్షం",
+    "chapters": [
+      18,
+      9
+    ]
+  },
+  {
+    "id": "mind",
+    "name": "Mind & Self-Control",
+    "telugu": "మనస్సు",
+    "chapters": [
+      6,
+      2
+    ]
+  },
+  {
+    "id": "detachment",
+    "name": "Non-attachment",
+    "telugu": "విరక్తి",
+    "chapters": [
+      2,
+      5,
+      12
+    ]
+  },
+  {
+    "id": "peace",
+    "name": "Inner Peace",
+    "telugu": "శాంతి",
+    "chapters": [
+      2,
+      5,
+      6
+    ]
+  }
+]
