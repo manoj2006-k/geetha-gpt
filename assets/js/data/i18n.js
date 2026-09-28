@@ -55,6 +55,20 @@ export const I18N = {
   doi: DOI
 };
 
+export const ORIGINAL_SLOGAN = "Wisdom for Every Question";
+export const ORIGINAL_TAGLINE = "Timeless Bhagavad Gita Guidance for Modern Life";
+
+/**
+ * Returns the application slogan in its original language/content.
+ * The slogan remains unchanged regardless of uiLanguage.
+ * Any automatic translation of the slogan based on uiLanguage is removed.
+ * @param {string} [_uiLanguage] - Optional interface language code (ignored to keep slogan unchanged)
+ * @returns {string} - Original slogan
+ */
+export function getSlogan(_uiLanguage) {
+  return ORIGINAL_SLOGAN;
+}
+
 export { LANGUAGES, getLanguage, isRTL, getScriptFontClass };
 
 /**
@@ -66,6 +80,14 @@ export { LANGUAGES, getLanguage, isRTL, getScriptFontClass };
  */
 export function t(path, lang = 'en', fallback = 'en') {
   if (!path) return '';
+
+  // Slogan remains in its original language/content and must NOT automatically change based on website language
+  if (path === 'slogan' || path === 'home.heroTitle') {
+    return ORIGINAL_SLOGAN;
+  }
+  if (path === 'tagline') {
+    return ORIGINAL_TAGLINE;
+  }
 
   const getByPath = (obj, p) => {
     if (!obj) return undefined;
@@ -86,3 +108,4 @@ export function t(path, lang = 'en', fallback = 'en') {
 
   return val !== undefined ? val : path;
 }
+

@@ -11,7 +11,7 @@ const STORAGE_KEYS = {
 };
 
 const DEFAULT_SETTINGS = {
-  language: 'en', // 'en' | 'te'
+  language: 'en', // 22 Scheduled Indian Languages + English
   theme: 'light', // 'light' | 'dark'
   sanskritDisplay: 'devanagari', // 'devanagari' | 'translit' | 'telugu'
   fontSize: 'medium', // 'small' | 'medium' | 'large'
@@ -25,9 +25,31 @@ const DEFAULT_SAVED_VERSES = [
   { verseId: "18-66", savedAt: Date.now() - 3600000 * 5, note: "Surrender all anxieties to the divine and act with courageous peace." }
 ];
 
-const DEFAULT_CHAT_HISTORY = [];
-
 class StorageManager {
+  // Helper: Retrieve item with fallback check for legacy account keys
+  getStoredItem(baseKey) {
+    try {
+      const data = localStorage.getItem(baseKey);
+      if (data !== null) return data;
+      // Fallback migration check for data saved under legacy user account keys
+      const legacyKey = `${baseKey}_user_account_a`;
+      const legacyData = localStorage.getItem(legacyKey);
+      if (legacyData !== null) {
+        localStorage.setItem(baseKey, legacyData);
+        return legacyData;
+      }
+      const guestKey = `${baseKey}_guest`;
+      const guestData = localStorage.getItem(guestKey);
+      if (guestData !== null) {
+        localStorage.setItem(baseKey, guestData);
+        return guestData;
+      }
+    } catch (e) {
+      console.warn("Storage read error:", e);
+    }
+    return null;
+  }
+
   // Settings
   getSettings() {
     try {
@@ -59,14 +81,17 @@ class StorageManager {
   // Saved Verses (Bookmarks)
   getSavedVerses() {
     try {
-      const data = localStorage.getItem(STORAGE_KEYS.SAVED_VERSES);
+      const data = this.getStoredItem(STORAGE_KEYS.SAVED_VERSES);
       if (data) {
         const parsed = JSON.parse(data);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) return parsed;
       }
-      return DEFAULT_SAVED_VERSES;
+      if (data === null) {
+        return DEFAULT_SAVED_VERSES;
+      }
+      return [];
     } catch {
-      return DEFAULT_SAVED_VERSES;
+      return [];
     }
   }
 
@@ -99,6 +124,16 @@ class StorageManager {
     }
   }
 
+  clearAllSavedVerses() {
+    try {
+      localStorage.setItem(STORAGE_KEYS.SAVED_VERSES, JSON.stringify([]));
+      return true;
+    } catch (e) {
+      console.warn("Error clearing saved verses:", e);
+      return false;
+    }
+  }
+
   isVerseSaved(verseId) {
     const list = this.getSavedVerses();
     return list.some(item => item.verseId === verseId);
@@ -122,14 +157,14 @@ class StorageManager {
   // Viewed Verses & Reading Progress Tracking
   getViewedVerses() {
     try {
-      const data = localStorage.getItem(STORAGE_KEYS.VIEWED_VERSES);
+      const data = this.getStoredItem(STORAGE_KEYS.VIEWED_VERSES);
       if (data) {
         const parsed = JSON.parse(data);
         if (Array.isArray(parsed)) return parsed;
       }
-      return ["1-1", "2-47", "18-78"];
+      return [];
     } catch {
-      return ["1-1", "2-47", "18-78"];
+      return [];
     }
   }
 
@@ -170,7 +205,7 @@ class StorageManager {
   // Chat History
   getChatHistory() {
     try {
-      const data = localStorage.getItem(STORAGE_KEYS.CHAT_HISTORY);
+      const data = this.getStoredItem(STORAGE_KEYS.CHAT_HISTORY);
       if (data) {
         const parsed = JSON.parse(data);
         if (Array.isArray(parsed)) return parsed;

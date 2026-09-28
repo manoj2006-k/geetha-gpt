@@ -6,10 +6,10 @@ import { I18N } from '../data/i18n.js';
 import { DAILY_WISDOM_DATA } from '../data/dailyWisdomData.js';
 import { VERSES_DATA } from '../data/versesData.js';
 import { storageManager } from '../utils/storageUtil.js';
-import { speechEngine } from '../utils/speechUtil.js';
 import { soundSynthesizer } from '../utils/soundUtil.js';
 import { toastManager } from '../components/Toast.js';
 import { openShareModal } from '../components/ShareModal.js';
+import { renderVoiceButton } from '../components/VoiceButton.js';
 
 export function renderDailyWisdomPage(options = {}) {
   const {
@@ -74,34 +74,31 @@ export function renderDailyWisdomPage(options = {}) {
             </span>
           </div>
 
-          <!-- Main Actions: Save Verse, Share, Read Aloud -->
+          <!-- Main Actions: Save Verse, Share, Voice -->
           <div class="flex flex-wrap items-center gap-2">
             <!-- Save Bookmark -->
-            <button id="daily-save-btn" class="flex items-center gap-1.5 px-4 py-2 rounded-xl border text-xs font-bold transition ${
+            <button id="daily-save-btn" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-bold transition ${
               isSaved
                 ? 'bg-amber-500/20 border-amber-500/50 text-amber-800 dark:text-amber-300'
                 : 'border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:border-amber-500 hover:text-amber-600'
             }">
               <svg class="w-4 h-4 ${isSaved ? 'fill-current' : 'fill-none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
-              <span>${isSaved ? (lang === 'te' ? 'భద్రపరిచారు' : 'Verse Saved') : (lang === 'te' ? 'భద్రపరుచు' : 'Save Verse')}</span>
+              <span>${isSaved ? (t.home?.saved || 'Saved') : (t.home?.save || 'Save')}</span>
             </button>
 
             <!-- Generate Share Card -->
             <button id="daily-share-btn" class="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-amber-500 text-stone-700 dark:text-stone-300 text-xs font-bold transition">
               <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-              <span>${lang === 'te' ? 'పంచుకోండి' : 'Share'}</span>
+              <span>${t.home?.share || 'Share'}</span>
             </button>
 
-            <!-- Audio Read Aloud Button -->
-            <button id="daily-audio-btn" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-300 text-xs font-bold transition">
-              <svg class="w-4 h-4 play-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
-              <span>${lang === 'te' ? 'వినండి' : 'Read Aloud'}</span>
-            </button>
+            <!-- Sanskrit Recitation Voice Button Mount -->
+            <div id="daily-sanskrit-voice-mount"></div>
           </div>
         </div>
 
         <!-- Sanskrit Shloka Block -->
-        <div class="py-6 px-4 rounded-2xl bg-amber-500/[0.05] dark:bg-amber-500/[0.07] border border-amber-500/20 text-center">
+        <div class="relative py-6 px-4 rounded-2xl bg-amber-500/[0.05] dark:bg-amber-500/[0.07] border border-amber-500/20 text-center">
           <p class="font-sanskrit text-lg sm:text-2xl text-stone-900 dark:text-amber-100 font-bold leading-relaxed whitespace-pre-line">
             ${scriptText}
           </p>
@@ -143,10 +140,13 @@ export function renderDailyWisdomPage(options = {}) {
 
         <!-- Translation & Commentary -->
         <div class="flex flex-col gap-4">
-          <div class="flex flex-col gap-1">
-            <span class="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400 font-cinzel">
-              ${lang === 'te' ? 'తాత్పర్యం' : 'Translation'}
-            </span>
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400 font-cinzel">
+                ${t.common?.translation || 'Translation'}
+              </span>
+              <div id="daily-translation-voice-mount"></div>
+            </div>
             <p class="text-stone-800 dark:text-stone-200 text-base sm:text-lg leading-relaxed ${lang === 'te' ? 'font-telugu' : ''}">
               ${translationText}
             </p>
@@ -155,7 +155,7 @@ export function renderDailyWisdomPage(options = {}) {
           <div class="flex flex-col gap-1 bg-amber-500/[0.03] dark:bg-amber-500/[0.05] p-4 rounded-2xl border border-amber-500/15 text-sm text-stone-700 dark:text-stone-300">
             <span class="text-xs font-semibold text-amber-800 dark:text-amber-400 flex items-center gap-1.5">
               <span>✨</span>
-              <span>${lang === 'te' ? 'లోతైన వివరణ' : 'Spiritual Commentary'}</span>
+              <span>${t.common?.explanation || 'Spiritual Commentary'}</span>
             </span>
             <p class="leading-relaxed ${lang === 'te' ? 'font-telugu' : ''}">
               ${explanationText}
@@ -213,7 +213,7 @@ export function renderDailyWisdomPage(options = {}) {
                   ${lang === 'te' ? dw.teluguTranslation : dw.translation}
                 </p>
               </div>
-              <span class="text-xs font-bold text-amber-600 dark:text-amber-400 mt-3">Read Wisdom →</span>
+              <span class="text-xs font-bold text-amber-600 dark:text-amber-400 mt-3">${t.common?.viewWisdom || 'Read Wisdom'} →</span>
             </div>
           `
           ).join('')}
@@ -221,39 +221,57 @@ export function renderDailyWisdomPage(options = {}) {
       </div>
     `;
 
+    // Mount Voice Buttons
+    const sanskritVoiceMount = page.querySelector('#daily-sanskrit-voice-mount');
+    if (sanskritVoiceMount) {
+      const vBtn = renderVoiceButton({
+        text: wisdom.sanskrit,
+        lang: 'sa',
+        label: t.verseDetail?.recitation || 'Recitation',
+        buttonStyle: 'secondary'
+      });
+      sanskritVoiceMount.appendChild(vBtn);
+    }
+
+    const transVoiceMount = page.querySelector('#daily-translation-voice-mount');
+    if (transVoiceMount) {
+      const vBtn = renderVoiceButton({
+        text: translationText,
+        lang: lang,
+        label: t.home?.readAloud || 'Read Aloud',
+        buttonStyle: 'ghost'
+      });
+      transVoiceMount.appendChild(vBtn);
+    }
+
     // Reattach Event Handlers
-    const audioBtn = page.querySelector('#daily-audio-btn');
     const shareBtn = page.querySelector('#daily-share-btn');
     const saveBtn = page.querySelector('#daily-save-btn');
 
-    audioBtn.onclick = () => {
-      soundSynthesizer.playZenBell();
-      const speakText = lang === 'te'
-        ? `${wisdom.sanskrit}. తాత్పర్యం: ${wisdom.teluguTranslation}`
-        : `${wisdom.sanskrit}. Translation: ${wisdom.translation}`;
-      speechEngine.speak(speakText, lang === 'te' ? 'te' : 'sa');
-    };
-
-    shareBtn.onclick = () => {
-      soundSynthesizer.playChime();
-      openShareModal(verseObj, lang, theme);
-    };
-
-    saveBtn.onclick = () => {
-      const nowSaved = !storageManager.isVerseSaved(wisdom.verseId);
-      if (nowSaved) {
-        storageManager.saveVerse(wisdom.verseId);
+    if (shareBtn) {
+      shareBtn.onclick = () => {
         soundSynthesizer.playChime();
-        if (window.confetti) {
-          window.confetti({ particleCount: 30, spread: 60, origin: { y: 0.8 }, colors: ['#D97706', '#F59E0B'] });
+        openShareModal(verseObj, lang, theme);
+      };
+    }
+
+    if (saveBtn) {
+      saveBtn.onclick = () => {
+        const nowSaved = !storageManager.isVerseSaved(wisdom.verseId);
+        if (nowSaved) {
+          storageManager.saveVerse(wisdom.verseId);
+          soundSynthesizer.playChime();
+          if (window.confetti) {
+            window.confetti({ particleCount: 30, spread: 60, origin: { y: 0.8 }, colors: ['#D97706', '#F59E0B'] });
+          }
+          toastManager.show(t.common?.savedSuccess || (lang === 'te' ? "బుక్‌మార్క్‌లలో భద్రపరచబడింది!" : "Verse saved to bookmarks!"), "success");
+        } else {
+          storageManager.removeVerse(wisdom.verseId);
+          toastManager.show(t.common?.removedSuccess || (lang === 'te' ? "బుక్‌మార్క్‌ల నుండి తొలగించబడింది" : "Verse removed"), "info");
         }
-        toastManager.show(lang === 'te' ? "బుక్‌మార్క్‌లలో భద్రపరచబడింది!" : "Verse saved to bookmarks!", "success");
-      } else {
-        storageManager.removeVerse(wisdom.verseId);
-        toastManager.show(lang === 'te' ? "బుక్‌మార్క్‌ల నుండి తొలగించబడింది" : "Verse removed", "info");
-      }
-      renderContent();
-    };
+        renderContent();
+      };
+    }
 
     page.querySelectorAll('.archive-wisdom-card').forEach(card => {
       card.onclick = () => {

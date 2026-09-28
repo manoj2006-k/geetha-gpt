@@ -2,7 +2,7 @@
  * Geetha GPT - Mobile Drawer & Bottom Navigation Bar Component
  */
 
-import { I18N } from '../data/i18n.js';
+import { I18N, t } from '../data/i18n.js';
 import { getLanguage, getScriptFontClass } from '../data/languages.js';
 import { languageModal } from './LanguageModal.js';
 import { storageManager } from '../utils/storageUtil.js';
@@ -10,18 +10,19 @@ import { soundSynthesizer } from '../utils/soundUtil.js';
 
 export function renderMobileBottomNav(currentRoute, options = {}) {
   const { lang = 'en', onNavigate = null, onToggleLang = null } = options;
-  const t = I18N[lang] || I18N.en;
+  const dict = I18N[lang] || I18N.en;
+  const navText = dict.nav || {};
   const savedCount = storageManager.getSavedVerses().length;
 
   const nav = document.createElement('div');
-  nav.className = 'lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/90 dark:bg-[#121110]/95 backdrop-blur-lg border-t border-stone-200 dark:border-stone-800 px-2 py-1.5 flex items-center justify-around shadow-2xl transition-colors';
+  nav.className = 'lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-[#121110]/95 backdrop-blur-lg border-t border-stone-200 dark:border-stone-800 px-2 pt-1.5 mobile-bottom-nav-safe flex items-center justify-around shadow-2xl transition-colors';
 
   const items = [
-    { id: 'home', icon: 'Home', label: t.nav.home },
-    { id: 'chapters', icon: 'BookOpen', label: t.nav.chapters },
-    { id: 'askGeetha', icon: 'MessageSquareQuote', label: t.nav.askGeetha, isCenter: true },
-    { id: 'topics', icon: 'Compass', label: t.nav.topics },
-    { id: 'saved', icon: 'Bookmark', label: t.nav.savedVerses, count: savedCount > 0 ? savedCount : null }
+    { id: 'home', icon: 'Home', label: navText.home || 'Home' },
+    { id: 'chapters', icon: 'BookOpen', label: navText.chapters || 'Chapters' },
+    { id: 'askGeetha', icon: 'MessageSquareQuote', label: navText.askGeetha || 'Ask Geetha', isCenter: true },
+    { id: 'topics', icon: 'Compass', label: navText.topics || 'Topics' },
+    { id: 'saved', icon: 'Bookmark', label: navText.savedVerses || 'Saved', count: savedCount > 0 ? savedCount : null }
   ];
 
   nav.innerHTML = items
@@ -29,9 +30,9 @@ export function renderMobileBottomNav(currentRoute, options = {}) {
       const isActive = currentRoute === item.id;
       if (item.isCenter) {
         return `
-          <button data-nav="${item.id}" class="mobile-nav-btn relative -top-3 flex flex-col items-center group">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 text-white flex items-center justify-center shadow-lg shadow-amber-600/30 border-2 border-white dark:border-[#121110] transform group-active:scale-95 transition">
-              <span class="animate-flame text-lg">🪔</span>
+          <button data-nav="${item.id}" class="mobile-nav-btn relative -top-3 flex flex-col items-center group" aria-label="${item.label}">
+            <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-lg shadow-amber-600/35 border-2 border-amber-400/80 transform group-active:scale-95 transition bg-stone-900 flex items-center justify-center">
+              <img src="./assets/images/krishna_arjuna_logo.jpg" alt="Gitopadesh" class="w-full h-full object-cover" />
             </div>
             <span class="text-[10px] font-bold text-amber-700 dark:text-amber-400 mt-0.5 ${getScriptFontClass(lang)}">${item.label}</span>
           </button>
@@ -43,7 +44,7 @@ export function renderMobileBottomNav(currentRoute, options = {}) {
           isActive
             ? 'text-amber-700 dark:text-amber-300 font-bold'
             : 'text-stone-500 dark:text-stone-400'
-        }">
+        }" aria-label="${item.label}">
           <div class="relative">
             <i data-lucide="${item.icon}" class="w-5 h-5 ${isActive ? 'text-amber-600 dark:text-amber-400' : ''}"></i>
             ${
@@ -71,7 +72,8 @@ export function renderMobileBottomNav(currentRoute, options = {}) {
 
 export function openMobileDrawer(currentRoute, options = {}) {
   const { lang = 'en', onNavigate = null, onToggleLang = null } = options;
-  const t = I18N[lang] || I18N.en;
+  const dict = I18N[lang] || I18N.en;
+  const navText = dict.nav || {};
   const currentLangObj = getLanguage(lang);
 
   const existing = document.getElementById('mobile-drawer-modal');
@@ -82,14 +84,14 @@ export function openMobileDrawer(currentRoute, options = {}) {
   drawer.className = 'fixed inset-0 z-50 flex page-fade-in bg-black/60 backdrop-blur-sm lg:hidden';
 
   const menuList = [
-    { id: 'home', icon: 'Home', label: t.nav.home },
-    { id: 'askGeetha', icon: 'MessageSquareQuote', label: t.nav.askGeetha, badge: 'AI' },
-    { id: 'chapters', icon: 'BookOpen', label: t.nav.chapters },
-    { id: 'topics', icon: 'Compass', label: t.nav.topics },
-    { id: 'dailyWisdom', icon: 'Sun', label: t.nav.dailyWisdom },
-    { id: 'saved', icon: 'Bookmark', label: t.nav.savedVerses },
-    { id: 'history', icon: 'History', label: t.nav.history },
-    { id: 'settings', icon: 'Settings', label: t.nav.settings }
+    { id: 'home', icon: 'Home', label: navText.home || 'Home' },
+    { id: 'askGeetha', icon: 'MessageSquareQuote', label: navText.askGeetha || 'Ask Geetha', badge: 'AI' },
+    { id: 'chapters', icon: 'BookOpen', label: navText.chapters || 'Chapters' },
+    { id: 'topics', icon: 'Compass', label: navText.topics || 'Topics' },
+    { id: 'dailyWisdom', icon: 'Sun', label: navText.dailyWisdom || 'Daily Wisdom' },
+    { id: 'saved', icon: 'Bookmark', label: navText.savedVerses || 'Saved Verses' },
+    { id: 'history', icon: 'History', label: navText.history || 'History' },
+    { id: 'settings', icon: 'Settings', label: navText.settings || 'Settings' }
   ];
 
   drawer.innerHTML = `
@@ -97,21 +99,21 @@ export function openMobileDrawer(currentRoute, options = {}) {
       <!-- Header -->
       <div class="flex items-center justify-between pb-4 border-b border-stone-200 dark:border-stone-800">
         <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 text-white flex items-center justify-center font-bold text-lg shadow-sm">
-            <span>🪔</span>
+          <div class="relative w-10 h-10 rounded-2xl overflow-hidden shadow-md border-2 border-amber-500/40 flex-shrink-0 bg-stone-900">
+            <img src="./assets/images/krishna_arjuna_logo.jpg" alt="Gitopadesh" class="w-full h-full object-cover" />
           </div>
           <div class="flex flex-col">
             <span class="font-cinzel font-bold text-base text-stone-900 dark:text-stone-100">Geetha GPT</span>
-            <span class="text-[10px] text-amber-600 font-cinzel">Bhagavad Gita AI</span>
+            <span class="text-[10px] text-amber-600 font-cinzel tracking-wider">Gitopadesh • Gita AI</span>
           </div>
         </div>
-        <button id="close-drawer-btn" class="p-2 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200">
+        <button id="close-drawer-btn" class="p-2 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200" aria-label="Close menu">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
       </div>
 
       <!-- Language Selector Button (23 Languages) -->
-      <div class="pt-3 pb-2">
+      <div class="pt-1 pb-2">
         <button id="drawer-lang-btn" class="w-full flex items-center justify-between p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs font-semibold text-stone-800 dark:text-stone-200">
           <div class="flex items-center gap-2.5">
             <span class="text-base">🌐</span>
@@ -152,7 +154,7 @@ export function openMobileDrawer(currentRoute, options = {}) {
 
       <!-- Footer Info -->
       <div class="pt-4 border-t border-stone-200 dark:border-stone-800 text-xs text-stone-500 dark:text-stone-400 flex flex-col gap-1">
-        <span class="font-cinzel font-bold text-amber-700 dark:text-amber-400">Timeless Guidance</span>
+        <span class="font-cinzel font-bold text-amber-700 dark:text-amber-400">${t('footer.sanatanadharma', lang) || 'Sanatana Dharma'}</span>
         <span>22 Indian Languages + English</span>
       </div>
     </div>
@@ -191,4 +193,3 @@ export function openMobileDrawer(currentRoute, options = {}) {
     };
   });
 }
-

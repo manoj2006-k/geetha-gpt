@@ -6,9 +6,14 @@
 
 import { soundSynthesizer } from '../utils/soundUtil.js';
 import { getScriptFontClass } from '../data/languages.js';
+import { I18N, t } from '../data/i18n.js';
 
 export function renderChapterCard(chapter, options = {}) {
   const { lang = 'en', onExplore = null } = options;
+
+  const dict = I18N[lang] || I18N.en;
+  const versesLabel = (dict.chapters && dict.chapters.versesCount) || (dict.common && dict.common.versesCount) || 'Verses';
+  const exploreLabel = (dict.chapters && dict.chapters.viewChapter) || (dict.common && dict.common.exploreChapter) || 'Explore Chapter →';
 
   const formattedNum = chapter.formattedNumber || (chapter.number < 10 ? `0${chapter.number}` : `${chapter.number}`);
   const title = lang === 'te' ? chapter.teluguTitle : (lang === 'hi' && chapter.hindiTitle ? chapter.hindiTitle : (lang === 'sa' ? chapter.sanskritName : chapter.englishTitle));
@@ -26,7 +31,7 @@ export function renderChapterCard(chapter, options = {}) {
           ${formattedNum}
         </span>
         <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 border border-stone-200/80 dark:border-stone-700">
-          ${chapter.verseCount} Verses
+          ${chapter.verseCount} ${versesLabel}
         </span>
       </div>
 
@@ -54,8 +59,7 @@ export function renderChapterCard(chapter, options = {}) {
     <!-- Bottom Action Button: Explore Chapter → -->
     <div class="pt-4 mt-4 border-t border-stone-100 dark:border-stone-800/80 flex items-center justify-between">
       <button class="explore-btn w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500/10 dark:bg-amber-500/15 hover:bg-amber-600 dark:hover:bg-amber-600 text-amber-900 dark:text-amber-200 hover:text-white dark:hover:text-white font-cinzel font-bold text-xs transition duration-200">
-        <span>Explore Chapter</span>
-        <span>→</span>
+        <span>${exploreLabel}</span>
       </button>
     </div>
   `;

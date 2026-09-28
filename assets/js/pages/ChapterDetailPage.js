@@ -10,6 +10,7 @@ import { VERSES_DATA } from '../data/versesData.js';
 import { renderVerseCard } from '../components/VerseCard.js';
 import { storageManager } from '../utils/storageUtil.js';
 import { soundSynthesizer } from '../utils/soundUtil.js';
+import { I18N, t } from '../data/i18n.js';
 
 export function renderChapterDetailPage(options = {}) {
   const {
@@ -20,6 +21,13 @@ export function renderChapterDetailPage(options = {}) {
     highlightVerseId = null,
     onNavigate = null
   } = options;
+
+  const dict = I18N[lang] || I18N.en;
+  const backLabel = (dict.chapters && dict.chapters.backToChapters) || (dict.common && dict.common.backToAllChapters) || 'Back to All Chapters';
+  const chapterLabel = (dict.chapterDetail && dict.chapterDetail.chapterLabel) || 'Chapter';
+  const versesLabel = (dict.common && dict.common.versesCount) || 'Verses';
+  const previousLabel = (dict.verseDetail && dict.verseDetail.previousChapter) || 'Previous Chapter';
+  const nextLabel = (dict.verseDetail && dict.verseDetail.nextChapter) || 'Next Chapter';
 
   const currentNum = parseInt(chapterNumber, 10) || 2;
   const chapter = CHAPTERS_DATA.find(c => c.number === currentNum) || CHAPTERS_DATA[1];
@@ -47,7 +55,7 @@ export function renderChapterDetailPage(options = {}) {
     <div class="flex items-center justify-between mt-2">
       <button id="back-to-all-chapters-btn" class="flex items-center gap-2 px-4 py-2 rounded-xl border border-stone-200/90 dark:border-stone-800 hover:border-amber-500/50 bg-white dark:bg-[#1A1816] text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-amber-600 transition shadow-sm">
         <span>←</span>
-        <span>${lang === 'te' ? 'అన్ని అధ్యాయాలు' : 'Back to All Chapters'}</span>
+        <span>${backLabel}</span>
       </button>
 
       <div class="flex items-center gap-2">
@@ -66,10 +74,10 @@ export function renderChapterDetailPage(options = {}) {
           </span>
           <div class="flex flex-col">
             <span class="font-cinzel text-xs uppercase tracking-widest font-bold text-amber-800 dark:text-amber-400">
-              ${lang === 'te' ? `అధ్యాయం ${chapter.number} / 18` : `Chapter ${chapter.number} of 18`}
+              ${chapterLabel} ${chapter.number} / 18
             </span>
             <span class="text-xs font-semibold text-stone-500 dark:text-stone-400">
-              ${totalCount} ${lang === 'te' ? 'శ్లోకాలు' : 'Verses'}
+              ${totalCount} ${versesLabel}
             </span>
           </div>
         </div>
@@ -91,7 +99,7 @@ export function renderChapterDetailPage(options = {}) {
       </div>
 
       <!-- Description -->
-      <p class="text-stone-700 dark:text-stone-300 text-sm sm:text-base leading-relaxed max-w-3xl ${lang === 'te' ? 'font-telugu' : ''}">
+      <p class="text-stone-700 dark:text-stone-300 text-sm sm:text-base leading-relaxed max-w-3xl">
         ${lang === 'te' ? chapter.teluguSummary : chapter.englishSummary}
       </p>
 
@@ -102,7 +110,7 @@ export function renderChapterDetailPage(options = {}) {
             ${lang === 'te' ? `చదివిన పురోగతి:` : `Reading Progress:`}
           </span>
           <span id="progress-text-display" class="font-bold text-amber-800 dark:text-amber-300 font-cinzel">
-            ${progress.viewedCount} / ${totalCount} ${lang === 'te' ? 'శ్లోకాలు వీక్షించారు' : 'verses viewed'} (${progress.percentage}%)
+            ${progress.viewedCount} / ${totalCount} ${versesLabel} (${progress.percentage}%)
           </span>
         </div>
         <div class="w-full h-2.5 rounded-full bg-stone-200/80 dark:bg-stone-800 overflow-hidden">
@@ -112,7 +120,7 @@ export function renderChapterDetailPage(options = {}) {
 
       <!-- Key Themes Badges -->
       <div class="flex flex-wrap items-center gap-2 pt-1">
-        <span class="text-xs font-bold text-stone-500 dark:text-stone-400 font-cinzel">${lang === 'te' ? 'ముఖ్య అంశాలు:' : 'Main Themes:'}</span>
+        <span class="text-xs font-bold text-stone-500 dark:text-stone-400 font-cinzel">${(dict.chapterDetail && dict.chapterDetail.keyThemes) || 'Main Themes:'}</span>
         ${(lang === 'te' && chapter.teluguThemes ? chapter.teluguThemes : chapter.keyThemes)
           .map(
             themeItem => `<span class="px-3 py-1 rounded-lg text-xs font-semibold bg-white/80 dark:bg-stone-800/80 text-amber-900 dark:text-amber-200 border border-amber-500/20 shadow-sm">${themeItem}</span>`
@@ -128,7 +136,7 @@ export function renderChapterDetailPage(options = {}) {
         <input 
           type="text" 
           id="chapter-verse-search" 
-          placeholder="${lang === 'te' ? `అధ్యాయం ${chapter.number} లోని శ్లోకాలను వెతకండి (ఉదా: 2.${chapter.number === 2 ? '47' : '1'}, కర్మ, ఆత్మ)...` : `Search this chapter (e.g. ${chapter.number}.1, Sanskrit, translation, meaning)...`}" 
+          placeholder="${(dict.chapterDetail && dict.chapterDetail.searchVersePlaceholder) || 'Search verses in this chapter...'}" 
           class="w-full pl-11 pr-4 py-3 rounded-2xl bg-white dark:bg-[#1A1816] border border-stone-200/90 dark:border-stone-800 text-stone-900 dark:text-stone-100 placeholder-stone-400 text-sm font-medium shadow-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/15 transition" 
         />
         <svg class="w-5 h-5 text-amber-600 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,35 +144,29 @@ export function renderChapterDetailPage(options = {}) {
         </svg>
       </div>
 
-      <!-- Filter Tabs: All, Sanskrit, Translation, Meaning, Saved & Language Switch -->
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200/80 dark:border-stone-800 pb-3">
-        <div class="flex flex-wrap items-center gap-1.5" id="verse-filter-tabs">
-          <button data-filter="all" class="verse-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-amber-600 text-white shadow-sm">
-            ${lang === 'te' ? 'అన్నీ' : 'All'}
+      <!-- Filter Tabs: All, Sanskrit, Translation, Meaning, Saved -->
+      <div class="flex flex-wrap items-center justify-between gap-2.5 border-b border-stone-200/80 dark:border-stone-800 pb-3">
+        <div class="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1 max-w-full" id="verse-filter-tabs">
+          <button data-filter="all" class="verse-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-amber-600 text-white shadow-sm flex-shrink-0">
+            ${dict.common?.filterAll || 'All'}
           </button>
-          <button data-filter="sanskrit" class="verse-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-white dark:bg-[#1A1816] text-stone-600 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800 hover:border-amber-500/40">
-            ${lang === 'te' ? 'సంస్కృతం' : 'Sanskrit'}
+          <button data-filter="sanskrit" class="verse-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-white dark:bg-[#1A1816] text-stone-600 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800 hover:border-amber-500/40 flex-shrink-0">
+            ${dict.common?.sanskrit || 'Sanskrit'}
           </button>
-          <button data-filter="translation" class="verse-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-white dark:bg-[#1A1816] text-stone-600 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800 hover:border-amber-500/40">
-            ${lang === 'te' ? 'తాత్పర్యం' : 'Translation'}
+          <button data-filter="translation" class="verse-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-white dark:bg-[#1A1816] text-stone-600 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800 hover:border-amber-500/40 flex-shrink-0">
+            ${dict.common?.translation || 'Translation'}
           </button>
-          <button data-filter="meaning" class="verse-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-white dark:bg-[#1A1816] text-stone-600 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800 hover:border-amber-500/40">
-            ${lang === 'te' ? 'వివరణ' : 'Meaning'}
+          <button data-filter="meaning" class="verse-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-white dark:bg-[#1A1816] text-stone-600 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800 hover:border-amber-500/40 flex-shrink-0">
+            ${dict.common?.explanation || 'Meaning'}
           </button>
-          <button data-filter="saved" class="verse-tab-btn px-3.5 py-1.5 rounded-xl text-xs font-bold transition bg-white dark:bg-[#1A1816] text-stone-600 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800 hover:border-amber-500/40">
-            ⭐ ${lang === 'te' ? 'భద్రపరిచినవి' : 'Saved'}
+          <button data-filter="saved" class="verse-tab-btn px-3 py-1.5 rounded-xl text-xs font-bold transition bg-white dark:bg-[#1A1816] text-stone-600 dark:text-stone-300 border border-stone-200/80 dark:border-stone-800 hover:border-amber-500/40 flex-shrink-0">
+            ⭐ ${dict.saved?.title || 'Saved'}
           </button>
         </div>
 
-        <div class="flex items-center gap-3">
-          <!-- Chapter Global Language Translation Toggle -->
-          <button id="chapter-toggle-lang-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-300 dark:border-emerald-700 text-xs font-bold text-emerald-800 dark:text-emerald-300 hover:border-emerald-500 transition shadow-sm" title="Toggle Telugu / English Translations">
-            <span>🌐</span>
-            <span id="chapter-toggle-lang-label">${lang === 'te' ? 'English' : 'తెలుగు'}</span>
-          </button>
-
+        <div class="flex items-center gap-2">
           <span id="showing-verses-count" class="text-xs font-semibold text-stone-500 dark:text-stone-400 font-cinzel">
-            ${totalCount} / ${totalCount} Verses
+            ${totalCount} / ${totalCount} ${versesLabel}
           </span>
         </div>
       </div>
@@ -180,32 +182,32 @@ export function renderChapterDetailPage(options = {}) {
           ? `
           <button id="prev-chapter-btn" class="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white dark:bg-[#1A1816] border border-stone-200/90 dark:border-stone-800 hover:border-amber-500 text-stone-800 dark:text-stone-200 font-cinzel font-bold text-xs sm:text-sm shadow-sm transition hover-lift">
             <span>←</span>
-            <span>${lang === 'te' ? `మునుపటి అధ్యాయం ${prevChapterNum}` : `Previous Chapter ${prevChapterNum}`}</span>
+            <span>${previousLabel} ${prevChapterNum}</span>
           </button>
           `
           : `
           <button disabled class="flex items-center gap-2 px-5 py-3 rounded-2xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-400 font-cinzel font-bold text-xs sm:text-sm opacity-50 cursor-not-allowed">
             <span>←</span>
-            <span>${lang === 'te' ? 'మొదటి అధ్యాయం' : 'Chapter 1'}</span>
+            <span>${chapterLabel} 1</span>
           </button>
           `
       }
 
       <span class="font-cinzel text-xs font-bold text-stone-500 dark:text-stone-400 text-center">
-        Chapter ${currentNum} / 18
+        ${chapterLabel} ${currentNum} / 18
       </span>
 
       ${
         nextChapterNum
           ? `
           <button id="next-chapter-btn" class="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white font-cinzel font-bold text-xs sm:text-sm shadow-md shadow-amber-600/20 transition hover-lift">
-            <span>${lang === 'te' ? `తదుపరి అధ్యాయం ${nextChapterNum}` : `Next Chapter ${nextChapterNum}`}</span>
+            <span>${nextLabel} ${nextChapterNum}</span>
             <span>→</span>
           </button>
           `
           : `
           <button disabled class="flex items-center gap-2 px-5 py-3 rounded-2xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-400 font-cinzel font-bold text-xs sm:text-sm opacity-50 cursor-not-allowed">
-            <span>${lang === 'te' ? 'ముగింపు అధ్యాయం' : 'Chapter 18'}</span>
+            <span>${chapterLabel} 18</span>
             <span>→</span>
           </button>
           `
@@ -257,7 +259,7 @@ export function renderChapterDetailPage(options = {}) {
         (v.sanskrit && v.sanskrit.toLowerCase().includes(cleanSearch)) ||
         (v.transliteration && v.transliteration.toLowerCase().includes(cleanSearch)) ||
         (v.englishTranslation && v.englishTranslation.toLowerCase().includes(cleanSearch)) ||
-        (v.englishExplanation && v.englishExplanation.toLowerCase().includes(cleanSearch)) ||
+        ((v.meaning || v.englishExplanation) && (v.meaning || v.englishExplanation).toLowerCase().includes(cleanSearch)) ||
         (v.teluguTranslation && v.teluguTranslation.toLowerCase().includes(cleanSearch)) ||
         (v.topics && v.topics.some(t => t.toLowerCase().includes(cleanSearch)))
       );
@@ -292,7 +294,7 @@ export function renderChapterDetailPage(options = {}) {
 
     filtered.forEach(v => {
       const vCard = renderVerseCard(v, {
-        lang: currentLang,
+        lang,
         theme,
         sanskritDisplay,
         showExplanation: activeFilter === 'all' || activeFilter === 'meaning',
@@ -363,21 +365,6 @@ export function renderChapterDetailPage(options = {}) {
     nextBtn.onclick = () => {
       soundSynthesizer.playChime();
       if (onNavigate && nextChapterNum) onNavigate('chapterDetail', { chapterNumber: nextChapterNum });
-    };
-  }
-
-  let currentLang = lang;
-  const chapterLangToggleBtn = page.querySelector('#chapter-toggle-lang-btn');
-  const chapterLangToggleLabel = page.querySelector('#chapter-toggle-lang-label');
-
-  if (chapterLangToggleBtn) {
-    chapterLangToggleBtn.onclick = () => {
-      soundSynthesizer.playChime();
-      currentLang = currentLang === 'te' ? 'en' : 'te';
-      if (chapterLangToggleLabel) {
-        chapterLangToggleLabel.textContent = currentLang === 'te' ? 'English' : 'తెలుగు';
-      }
-      renderVerses();
     };
   }
 

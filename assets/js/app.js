@@ -7,6 +7,7 @@
 
 import { storageManager } from './utils/storageUtil.js';
 import { soundSynthesizer } from './utils/soundUtil.js';
+import { speechEngine } from './utils/speechUtil.js';
 import { renderNavbar } from './components/Navbar.js';
 import { renderSidebar } from './components/Sidebar.js';
 import { renderMobileBottomNav, openMobileDrawer } from './components/MobileNav.js';
@@ -45,7 +46,6 @@ class GeethaApp {
 
     // Apply Sound setting
     soundSynthesizer.setEnabled(this.settings.soundEnabled);
-
     // Setup Global Keybinds (Ctrl+K / Cmd+K)
     window.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -89,6 +89,7 @@ class GeethaApp {
   }
 
   navigate(route, params = {}) {
+    speechEngine.stop();
     this.currentRoute = route;
     this.routeParams = params;
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -118,7 +119,7 @@ class GeethaApp {
 
     // 2. Main Content Canvas Area (Shifted right on Desktop)
     const mainCanvas = document.createElement('div');
-    mainCanvas.className = 'flex-1 flex flex-col lg:pl-64 min-w-0 pb-16 lg:pb-0';
+    mainCanvas.className = 'flex-1 flex flex-col lg:pl-64 min-w-0 pb-safe-bottom lg:pb-0';
 
     // 2a. Top Navbar
     const navbar = renderNavbar({
@@ -252,8 +253,8 @@ class GeethaApp {
 // Instantiate and mount app on DOM ready or immediately if already loaded
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    new GeethaApp();
+    window.app = new GeethaApp();
   });
 } else {
-  new GeethaApp();
+  window.app = new GeethaApp();
 }

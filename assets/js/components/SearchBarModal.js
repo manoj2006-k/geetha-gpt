@@ -9,9 +9,14 @@ import { VERSES_DATA } from '../data/versesData.js';
 import { TOPICS_DATA } from '../data/topicsData.js';
 import { CHAT_SUGGESTIONS } from '../data/chatMockData.js';
 import { soundSynthesizer } from '../utils/soundUtil.js';
+import { I18N, t } from '../data/i18n.js';
+import { getScriptFontClass } from '../data/languages.js';
 
 export function openSpotlightSearchModal(options = {}) {
   const { lang = 'en', onNavigate = null } = options;
+
+  const dict = I18N[lang] || I18N.en;
+  const searchPlaceholder = (dict.chapterDetail && dict.chapterDetail.searchVersePlaceholder) || (dict.chapters && dict.chapters.searchPlaceholder) || 'Search all 700 verses, 18 chapters...';
 
   const existing = document.getElementById('spotlight-search-modal');
   if (existing) existing.remove();
@@ -28,7 +33,7 @@ export function openSpotlightSearchModal(options = {}) {
         <input 
           type="text" 
           id="spotlight-input" 
-          placeholder="${lang === 'te' ? '700 శ్లోకాలు, 18 అధ్యాయాలు లేదా ప్రశ్నను వెతకండి (ఉదా: 2.47, కర్మ, శాంతి)...' : 'Search all 700 verses, 18 chapters (e.g. 2.47, 18.78, Karma, Peace)...'}" 
+          placeholder="${searchPlaceholder}" 
           class="w-full bg-transparent border-none outline-none text-stone-900 dark:text-stone-100 placeholder-stone-400 text-base font-medium" 
           autofocus
         />
@@ -43,7 +48,7 @@ export function openSpotlightSearchModal(options = {}) {
       <!-- Footer Quick Tips -->
       <div class="flex items-center justify-between px-5 py-3 border-t border-stone-100 dark:border-stone-800/80 bg-stone-50/50 dark:bg-stone-900/40 text-xs text-stone-500 dark:text-stone-400">
         <div class="flex items-center gap-2">
-          <span>Search 700 Verses • 18 Chapters</span>
+          <span>700 ${dict.common?.versesCount || 'Verses'} • 18 ${dict.chapters?.title ? 'Chapters' : 'Chapters'}</span>
         </div>
         <span>Press <kbd class="px-1.5 py-0.5 rounded bg-stone-200/60 dark:bg-stone-800">ESC</kbd> to close</span>
       </div>
@@ -63,21 +68,22 @@ export function openSpotlightSearchModal(options = {}) {
       // Default: show quick suggested questions & popular topics
       const sectionHeader = document.createElement('div');
       sectionHeader.className = 'px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-stone-400 font-cinzel';
-      sectionHeader.textContent = lang === 'te' ? 'సూచించిన ప్రశ్నలు & శ్లోకాలు' : 'Suggested Questions & Quick Prompts';
+      sectionHeader.textContent = (dict.chat && dict.chat.welcomePrompt) || 'Suggested Questions & Quick Prompts';
       resultsContainer.appendChild(sectionHeader);
 
       CHAT_SUGGESTIONS.forEach(sug => {
         const item = document.createElement('button');
         item.className = 'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-amber-500/10 text-left transition text-sm text-stone-700 dark:text-stone-200 group';
+        const sugText = (lang === 'te' && sug.te) ? sug.te : sug.en;
         item.innerHTML = `
           <span class="text-amber-600 dark:text-amber-400">💬</span>
-          <span class="flex-1 font-medium group-hover:text-amber-700 dark:group-hover:text-amber-300 ${lang === 'te' ? 'font-telugu' : ''}">${lang === 'te' ? sug.te : sug.en}</span>
-          <span class="text-xs text-stone-400 font-cinzel">Ask Geetha →</span>
+          <span class="flex-1 font-medium group-hover:text-amber-700 dark:group-hover:text-amber-300 ${getScriptFontClass(lang)}">${sugText}</span>
+          <span class="text-xs text-stone-400 font-cinzel">${dict.nav?.askGeetha || 'Ask Geetha'} →</span>
         `;
         item.onclick = () => {
           modal.remove();
           soundSynthesizer.playChime();
-          if (onNavigate) onNavigate('askGeetha', { query: lang === 'te' ? sug.te : sug.en });
+          if (onNavigate) onNavigate('askGeetha', { query: sugText });
         };
         resultsContainer.appendChild(item);
       });
@@ -109,7 +115,8 @@ export function openSpotlightSearchModal(options = {}) {
       const matchSanskrit = v.sanskrit && v.sanskrit.toLowerCase().includes(query);
       const matchTranslit = v.transliteration && v.transliteration.toLowerCase().includes(query);
       const matchTrans = v.englishTranslation && v.englishTranslation.toLowerCase().includes(query);
-      const matchExpl = v.englishExplanation && v.englishExplanation.toLowerCase().includes(query);
+      const meaningText = v.meaning || v.englishExplanation || '';
+      const matchExpl = meaningText && meaningText.toLowerCase().includes(query);
       const matchTelugu = v.teluguTranslation && v.teluguTranslation.includes(query);
       const matchTopics = v.topics && v.topics.some(t => t.toLowerCase().includes(query));
 
@@ -143,7 +150,7 @@ export function openSpotlightSearchModal(options = {}) {
       const vHeader = document.createElement('div');
       vHeader.className = 'px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 font-cinzel mt-2 flex items-center justify-between';
       vHeader.innerHTML = `
-        <span>${lang === 'te' ? 'శ్లోకాలు' : 'Verses'}</span>
+        <span>${dict.common?.versesCount || 'Verses'}</span>
         <span class="text-[10px] text-stone-400 font-sans">${matchedVerses.length} found</span>
       `;
       resultsContainer.appendChild(vHeader);
@@ -151,13 +158,14 @@ export function openSpotlightSearchModal(options = {}) {
       matchedVerses.forEach(v => {
         const item = document.createElement('button');
         item.className = 'w-full flex items-start gap-3 px-3.5 py-2.5 rounded-xl hover:bg-amber-500/10 text-left transition text-sm text-stone-700 dark:text-stone-200 group';
+        const trans = (lang === 'te' && v.teluguTranslation) ? v.teluguTranslation : (v.translations && v.translations[lang] ? v.translations[lang] : v.englishTranslation);
         item.innerHTML = `
           <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-800 dark:text-amber-300 font-cinzel font-bold text-xs mt-0.5 whitespace-nowrap">BG ${v.chapter}.${v.verse}</span>
           <div class="flex-1 flex flex-col min-w-0">
             <span class="text-xs font-sanskrit text-stone-500 line-clamp-1">${v.sanskrit.split('\n')[0]}</span>
-            <span class="font-medium text-stone-900 dark:text-stone-100 line-clamp-1 ${lang === 'te' ? 'font-telugu' : ''}">${lang === 'te' ? (v.teluguTranslation || v.englishTranslation) : v.englishTranslation}</span>
+            <span class="font-medium text-stone-900 dark:text-stone-100 line-clamp-1 ${getScriptFontClass(lang)}">${trans}</span>
           </div>
-          <span class="text-xs text-amber-600 font-cinzel font-semibold whitespace-nowrap group-hover:underline">View Verse →</span>
+          <span class="text-xs text-amber-600 font-cinzel font-semibold whitespace-nowrap group-hover:underline">${dict.verseDetail?.exploreVerse || 'View Verse'} →</span>
         `;
         item.onclick = () => {
           modal.remove();
@@ -172,19 +180,20 @@ export function openSpotlightSearchModal(options = {}) {
       hasResults = true;
       const cHeader = document.createElement('div');
       cHeader.className = 'px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 font-cinzel mt-2';
-      cHeader.textContent = lang === 'te' ? 'అధ్యాయాలు' : 'Chapters';
+      cHeader.textContent = dict.chapters?.title || 'Chapters';
       resultsContainer.appendChild(cHeader);
 
       matchedChapters.forEach(ch => {
         const item = document.createElement('button');
         item.className = 'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-amber-500/10 text-left transition text-sm text-stone-700 dark:text-stone-200 group';
+        const chTitle = lang === 'te' ? ch.teluguTitle : (lang === 'hi' && ch.hindiTitle ? ch.hindiTitle : (lang === 'sa' ? ch.sanskritName : ch.englishTitle));
         item.innerHTML = `
           <span class="w-6 h-6 rounded-lg bg-amber-600 text-white font-cinzel font-bold text-xs flex items-center justify-center">${ch.number}</span>
           <div class="flex-1 flex flex-col min-w-0">
-            <span class="font-bold text-stone-900 dark:text-stone-100 ${lang === 'te' ? 'font-telugu' : 'font-cinzel'}">${lang === 'te' ? ch.teluguTitle : ch.englishTitle}</span>
-            <span class="text-xs text-stone-400 font-sanskrit">${ch.sanskritName} • ${ch.verseCount || 72} Verses</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ${getScriptFontClass(lang)}">${chTitle}</span>
+            <span class="text-xs text-stone-400 font-sanskrit">${ch.sanskritName} • ${ch.verseCount || 72} ${dict.common?.versesCount || 'Verses'}</span>
           </div>
-          <span class="text-xs text-amber-600 font-semibold font-cinzel whitespace-nowrap">View Chapter →</span>
+          <span class="text-xs text-amber-600 font-semibold font-cinzel whitespace-nowrap">${dict.chapters?.viewChapter || 'View Chapter'} →</span>
         `;
         item.onclick = () => {
           modal.remove();
@@ -199,19 +208,20 @@ export function openSpotlightSearchModal(options = {}) {
       hasResults = true;
       const tHeader = document.createElement('div');
       tHeader.className = 'px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 font-cinzel mt-2';
-      tHeader.textContent = lang === 'te' ? 'జీవన అంశాలు' : 'Life Topics';
+      tHeader.textContent = dict.topics?.title || 'Life Topics';
       resultsContainer.appendChild(tHeader);
 
       matchedTopics.forEach(top => {
         const item = document.createElement('button');
         item.className = 'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-amber-500/10 text-left transition text-sm text-stone-700 dark:text-stone-200 group';
+        const topTitle = lang === 'te' ? top.teluguName : top.name;
         item.innerHTML = `
           <span class="text-amber-600 text-lg">✦</span>
           <div class="flex-1 flex flex-col min-w-0">
-            <span class="font-bold text-stone-900 dark:text-stone-100 ${lang === 'te' ? 'font-telugu' : 'font-cinzel'}">${lang === 'te' ? top.teluguName : top.name}</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ${getScriptFontClass(lang)}">${topTitle}</span>
             <span class="text-xs text-stone-400 font-sanskrit">${top.sanskritName}</span>
           </div>
-          <span class="text-xs text-amber-600 font-semibold font-cinzel whitespace-nowrap">Explore →</span>
+          <span class="text-xs text-amber-600 font-semibold font-cinzel whitespace-nowrap">${dict.common?.explore || 'Explore'} →</span>
         `;
         item.onclick = () => {
           modal.remove();
@@ -225,12 +235,14 @@ export function openSpotlightSearchModal(options = {}) {
     // Direct Ask Geetha Option
     const askOption = document.createElement('button');
     askOption.className = 'w-full flex items-center gap-3 px-3.5 py-3 rounded-xl bg-gradient-to-r from-amber-500/15 to-transparent border border-amber-500/30 text-left transition text-sm text-amber-900 dark:text-amber-200 font-semibold mt-3 group';
+    const askPrefix = dict.common?.askGeethaAbout || 'Ask Geetha GPT';
+    const sendLabel = dict.chat?.send || 'Send Question';
     askOption.innerHTML = `
       <span class="text-xl">🪔</span>
       <div class="flex-1">
-        <span>${lang === 'te' ? `గీతా GPTని అడగండి: "${query}"` : `Ask Geetha GPT: "${query}"`}</span>
+        <span>${askPrefix}: "${query}"</span>
       </div>
-      <span class="text-xs text-amber-700 dark:text-amber-300 font-cinzel whitespace-nowrap">Send Question →</span>
+      <span class="text-xs text-amber-700 dark:text-amber-300 font-cinzel whitespace-nowrap">${sendLabel} →</span>
     `;
     askOption.onclick = () => {
       modal.remove();

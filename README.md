@@ -1,58 +1,78 @@
 # 🪔 Geetha GPT — Bhagavad Gita Wisdom Platform
 
-> *Timeless spiritual guidance from the Bhagavad Gita, powered by a client-side ML engine — for modern life challenges.*
+> *Timeless spiritual guidance from the Bhagavad Gita for modern life challenges.*
 
-**Status:** Live & Verified | **Verses:** 700/700 ✔ | **Chapters:** 18/18 ✔ | **Languages:** 23 (22 Scheduled Indian Languages + English) | **ML Accuracy:** 99.48%
+**Status:** Live & Verified | **Verses:** 700/700 ✔ | **Chapters:** 18/18 ✔ | **Languages:** 23 (22 Scheduled Indian Languages + English) | **Multi-Account:** Isolated History & Bookmarks | **Audio:** Web Speech API + Web Audio Synthesizer
 
 ---
 
 ## 📖 What is Geetha GPT?
 
-**Geetha GPT** is a zero-backend, 100% client-side web application that brings the wisdom of the **Bhagavad Gita** into daily modern life. It uses a **trained TF-IDF + SGDClassifier ML model** (2 million training examples, 54 intents) embedded directly in the browser to understand your question and respond with the most relevant Gita teaching — in English or Telugu.
+**Geetha GPT** is a standalone, client-side web application that brings the wisdom of the **Bhagavad Gita** into daily modern life. It helps seekers navigate anxiety, career decisions, emotional conflict, and spiritual questions using the timeless philosophy of Krishna and Arjuna.
 
-No server. No API keys. No database. Everything runs inside your browser.
+### 🏗️ Real Architecture & How It Works
+
+Geetha GPT is built to run 100% locally in the browser with **zero backend dependencies, zero external tracking, and zero API costs**:
+
+1. **Client-Side Intent & Dialogue Engine**:
+   - The runtime chatbot in `AskGeethaPage.js` matches user questions against a curated repository of psychological dilemmas, life topics, and canonical verses (`chatMockData.js` and `VERSES_DATA`).
+   - Every answer delivers authentic spiritual counsel citing exact Chapter and Verse (e.g., BG 2.47, BG 6.5, BG 18.66), complete with Sanskrit shloka, IAST transliteration, translation, contemplation steps, and action checklists.
+2. **Offline ML Model Artifacts**:
+   - The repository contains an offline-trained **TF-IDF + SGDClassifier ML model** (54 intent classes, 5,000 vocabulary tokens) trained on augmented Q&A datasets.
+   - The runtime web app delivers instantaneous responses with zero latency by bundling dialogue mappings and full verse indices directly in client JavaScript.
+3. **Multi-Account Isolation**:
+   - Supports preset user profiles (**Account A**, **Account B**, **Guest Mode**) as well as custom account creation.
+   - Every account maintains strictly isolated LocalStorage keys for conversation history, reading progress, and bookmarked verses (`_user_account_a`, `_user_account_b`, etc.).
+   - Newly created accounts start with a clean slate (0 history, 0 bookmarks).
+4. **Voice & Audio System**:
+   - Every shloka, quote, translation, commentary, and assistant reply is equipped with a reactive `VoiceButton`.
+   - Uses the browser's native **Web Speech API** (`speechSynthesis`) with long-sentence chunking, 23-language voice fallback mappings, mutual exclusivity (stopping other audio on new playback), and visual soundwave animations.
+   - Sacred temple bells and singing bowl chimes are synthesized in real-time via the **Web Audio API** oscillator system without requiring heavy MP3 assets.
+5. **Comprehensive Multilingual UI (23 Languages)**:
+   - Full interface localization across all **22 Scheduled Indian Languages + English**:
+     *Assamese, Bengali, Bodo, Dogri, Gujarati, Hindi, Kannada, Kashmiri, Konkani, Maithili, Malayalam, Manipuri, Marathi, Nepali, Odia, Punjabi, Sanskrit, Santhali, Sindhi, Tamil, Telugu, Urdu, and English*.
+   - Centralized `I18N` dictionaries (`assets/js/data/i18n/*.js`), native script font loading, and bidirectional RTL layout support for Urdu and Sindhi.
 
 ---
 
 ## 🚀 Running Locally
 
 ```bash
-# Start local server (runs at http://localhost:8000)
+# Start local server (runs at http://localhost:8080)
 python server.py
 
-# Or directly open in browser (no web server required)
-Double-click index.html
+# Or launch directly with your default browser:
+python server.py --open
 ```
+
+No npm build step is required for runtime; `bundle.js` is pre-compiled and self-contained.
 
 ---
 
 ## ✅ Feature Status — What's Working
 
-All tests were run on **2026-09-10** and confirmed passing.
+### 🌐 Web Application & User Experience
 
-### 🌐 Web Application (Frontend)
-
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Single Page Application (SPA) routing | ✅ Working | Hash-based client-side router in `app.js` |
-| Home Dashboard | ✅ Working | Hero, Today's Wisdom, topic pills, chapters carousel |
-| Ask Geetha AI Chat | ✅ Working | ML intent engine + verse response + bilingual |
-| Explore All 18 Chapters | ✅ Working | Cards with Yoga classification, verse counts |
-| Chapter Detail Pages | ✅ Working | All 700 verses, Sanskrit + transliteration + translations |
-| Verse Detail Page | ✅ Working | Full breakdown: Sanskrit, IAST, English, Telugu, word meanings |
-| Topics Page (16 topics) | ✅ Working | Anger, Anxiety, Fear, Karma, etc. |
-| Topic Detail Page | ✅ Working | Gita analysis + curated verse list |
-| Daily Wisdom Page | ✅ Working | Reflection, word-by-word breakdown, mindfulness practice |
-| Saved Verses / Bookmarks | ✅ Working | LocalStorage persistence, notes editor, export |
-| Chat History | ✅ Working | Chronological log, resume past conversations |
-| Settings Page | ✅ Working | Language, theme, script, font size, sound |
-| Multilingual UI (23 Languages) | ✅ Working | Searchable LanguageModal, native script names, RTL for Urdu/Sindhi |
-| Light / Dark Theme | ✅ Working | Warm Cream ↔ Dark Sandalwood |
-| Sanskrit Script Selector | ✅ Working | Devanagari / Romanized IAST / Telugu script |
-| Global Search (`Ctrl+K`) | ✅ Working | Spotlight modal across chapters, verses, topics |
-| Desktop Sidebar Navigation | ✅ Working | Sticky, collapsible |
-| Mobile Bottom Navigation | ✅ Working | Bottom bar + slide-out drawer |
-| Responsive Design | ✅ Working | Mobile-first, desktop sidebar layout |
+| Feature | Status | Implementation Details |
+|---------|--------|------------------------|
+| Multi-Account Profile Switching | ✅ Working | `AuthManager` with Account A, Account B, Guest, and New User creation |
+| Account History Isolation | ✅ Working | User-scoped LocalStorage keys (`_user_*`); new accounts start empty |
+| Voice Playback (`VoiceButton`) | ✅ Working | Web Speech API audio for every shloka, translation, and AI answer |
+| Mutual Audio Exclusivity | ✅ Working | Playing new audio automatically resets all other active voice buttons |
+| 23 Languages Multilingual UI | ✅ Working | All 22 Scheduled Indian Languages + English via centralized `I18N` |
+| Native Script Typography | ✅ Working | Custom font classes for Devanagari, Telugu, Bengali, Gurmukhi, Tamil, etc. |
+| Right-to-Left (RTL) Support | ✅ Working | Dynamic `dir="rtl"` and mirrored CSS for Urdu and Sindhi |
+| Single Page Router (SPA) | ✅ Working | Seamless hash-free client navigation in `app.js` |
+| Explore All 18 Chapters | ✅ Working | 18 Chapters, 700 Verses, Yoga classifications, progress bars |
+| Verse Detail Page | ✅ Working | Word-by-word meanings, Sanskrit recitation audio, translation audio |
+| 16 Life Dilemma Topics | ✅ Working | Curated verses, psychological insights, reflection questions |
+| Daily Wisdom Spotlight | ✅ Working | Date-based shloka contemplation, mindfulness actions, archive |
+| Saved Verses / Bookmarks | ✅ Working | User-isolated bookmarking, personal notes, text export |
+| Conversation History | ✅ Working | User-isolated dialogue review, resume chat, delete/clear actions |
+| Global Search (`Ctrl+K`) | ✅ Working | Spotlight search across all chapters, verses, and topics |
+| Light / Dark Sandalwood Theme | ✅ Working | Warm Cream Parchment ↔ Deep Sandalwood Charcoal |
+| Temple Bell Sound Effects | ✅ Working | Real-time Web Audio API harmonic oscillator synthesis |
+| Downloadable Verse Cards | ✅ Working | HTML5 Canvas gold-bordered image generator |
 
 ---
 

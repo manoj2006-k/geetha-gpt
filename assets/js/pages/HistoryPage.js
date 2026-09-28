@@ -23,7 +23,7 @@ export function renderHistoryPage(options = {}) {
         <div class="flex flex-col gap-1">
           <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 text-xs font-semibold w-max">
             <span>🕰️</span>
-            <span class="${lang === 'te' ? 'font-telugu' : 'font-cinzel'}">${historyList.length} ${lang === 'te' ? 'సంభాషణలు' : 'Dialogues Logged'}</span>
+            <span class="${lang === 'te' ? 'font-telugu' : 'font-cinzel'}">${historyList.length} ${t.common?.dialoguesLogged || 'Dialogues Logged'}</span>
           </div>
           <h1 class="text-3xl sm:text-4xl font-extrabold text-stone-900 dark:text-stone-100 font-cinzel">
             ${t.history.title}
@@ -109,8 +109,8 @@ export function renderHistoryPage(options = {}) {
 
         const titleText = entry.title || (lang === 'te' && entry.teluguQuery ? entry.teluguQuery : entry.query) || 'Gita Dialogue';
         const msgCountText = entry.messageCount 
-          ? `${entry.messageCount} ${lang === 'te' ? 'సందేశాలు' : 'messages'}` 
-          : (entry.messages ? `${entry.messages.length} ${lang === 'te' ? 'సందేశాలు' : 'messages'}` : `2 ${lang === 'te' ? 'సందేశాలు' : 'messages'}`);
+          ? `${entry.messageCount} ${t.common?.messages || 'messages'}` 
+          : (entry.messages ? `${entry.messages.length} ${t.common?.messages || 'messages'}` : `2 ${t.common?.messages || 'messages'}`);
 
         itemCard.innerHTML = `
           <div class="flex items-start gap-3.5 flex-1">
@@ -131,7 +131,7 @@ export function renderHistoryPage(options = {}) {
 
           <div class="flex items-center gap-2 self-end sm:self-center">
             <button class="resume-btn flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-900 dark:text-amber-200 text-xs font-bold transition">
-              <span>${lang === 'te' ? 'తెరవండి' : 'Open'}</span>
+              <span>${t.common?.open || 'Open'}</span>
               <span>→</span>
             </button>
 
@@ -151,7 +151,7 @@ export function renderHistoryPage(options = {}) {
           e.stopPropagation();
           storageManager.deleteChatHistoryEntry(entry.id);
           soundSynthesizer.playChime();
-          toastManager.show(lang === 'te' ? "ఎంట్రీ తొలగించబడింది" : "History entry removed", "info");
+          toastManager.show(t.common?.removedSuccess || "History entry removed", "info");
           renderList();
         };
 
@@ -162,19 +162,20 @@ export function renderHistoryPage(options = {}) {
     }
 
     if (todayItems.length > 0) {
-      const sec = createSectionBlock(lang === 'te' ? 'నేడు (Today)' : 'Today', todayItems);
+      const sec = createSectionBlock(t.common?.today || 'Today', todayItems);
       if (sec) itemsMount.appendChild(sec);
     }
 
     if (yesterdayItems.length > 0) {
-      const sec = createSectionBlock(lang === 'te' ? 'నిన్న (Yesterday)' : 'Yesterday', yesterdayItems);
+      const sec = createSectionBlock(t.common?.yesterday || 'Yesterday', yesterdayItems);
       if (sec) itemsMount.appendChild(sec);
     }
 
     const clearAllBtn = page.querySelector('#clear-all-history-btn');
     if (clearAllBtn) {
       clearAllBtn.onclick = () => {
-        if (confirm(lang === 'te' ? "సంభాషణల చరిత్ర మొత్తాన్ని తొలగించాలా?" : "Clear all conversation history?")) {
+        const confirmMsg = lang === 'te' ? "సంభాషణల చరిత్ర మొత్తాన్ని తొలగించాలా?" : "Clear all conversation history?";
+        if (confirm(confirmMsg)) {
           storageManager.clearChatHistory();
           renderList();
           toastManager.show(lang === 'te' ? "చరిత్ర క్లియర్ చేయబడింది" : "History cleared", "info");

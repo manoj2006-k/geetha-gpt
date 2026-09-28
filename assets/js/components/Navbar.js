@@ -2,11 +2,12 @@
  * Geetha GPT - Top Navbar Component
  */
 
-import { I18N } from '../data/i18n.js';
+import { I18N, t } from '../data/i18n.js';
 import { getLanguage, getScriptFontClass } from '../data/languages.js';
 import { languageModal } from './LanguageModal.js';
 import { openSpotlightSearchModal } from './SearchBarModal.js';
 import { soundSynthesizer } from '../utils/soundUtil.js';
+import { voiceAssistantModal } from './VoiceAssistantModal.js';
 
 export function renderNavbar(options = {}) {
   const {
@@ -19,37 +20,40 @@ export function renderNavbar(options = {}) {
     onNavigate = null
   } = options;
 
-  const t = I18N[lang] || I18N.en;
-
+  const dict = I18N[lang] || I18N.en;
+  const navText = dict.nav || {};
+  
   const navLinks = [
-    { id: 'home', label: t.nav.home },
-    { id: 'askGeetha', label: t.nav.askGeetha },
-    { id: 'chapters', label: t.nav.chapters },
-    { id: 'topics', label: t.nav.topics },
-    { id: 'dailyWisdom', label: t.nav.dailyWisdom },
-    { id: 'saved', label: t.nav.savedVerses },
-    { id: 'history', label: t.nav.history }
+    { id: 'home', label: navText.home || 'Home' },
+    { id: 'askGeetha', label: navText.askGeetha || 'Ask Geetha' },
+    { id: 'chapters', label: navText.chapters || 'Chapters' },
+    { id: 'topics', label: navText.topics || 'Topics' },
+    { id: 'dailyWisdom', label: navText.dailyWisdom || 'Daily Wisdom' },
+    { id: 'saved', label: navText.savedVerses || 'Saved Verses' },
+    { id: 'history', label: navText.history || 'History' }
   ];
 
   const navbar = document.createElement('header');
   navbar.className = 'sticky top-0 z-20 w-full bg-white/90 dark:bg-[#121110]/90 backdrop-blur-md border-b border-stone-200/80 dark:border-stone-800/80 transition-colors duration-300';
 
+  const searchPlaceholder = t('home.searchInputPlaceholder', lang) || 'Ask Geetha GPT…';
+
   navbar.innerHTML = `
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
       <!-- Left: Mobile Hamburger & Logo -->
       <div class="flex items-center gap-3">
-        <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition">
+        <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition" aria-label="Open Navigation Menu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
 
-        <!-- Brand Logo -->
-        <div id="nav-brand-logo" class="flex items-center gap-2.5 cursor-pointer">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-amber-600/20">
-            <span class="animate-flame">🪔</span>
+        <!-- Brand Logo: Lord Krishna teaching Bhagavad Gita to Arjuna (Gitopadesh) -->
+        <div id="nav-brand-logo" class="flex items-center gap-2.5 cursor-pointer group" title="Geetha GPT — Gitopadesh">
+          <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-2xl overflow-hidden shadow-md shadow-amber-600/25 border-2 border-amber-500/40 group-hover:border-amber-500 transition-all flex-shrink-0 bg-stone-900">
+            <img src="./assets/images/krishna_arjuna_logo.jpg" alt="Lord Krishna teaching Bhagavad Gita to Arjuna" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300" />
           </div>
           <div class="flex flex-col">
             <span class="font-cinzel font-bold text-base sm:text-lg text-stone-900 dark:text-amber-50 tracking-tight leading-none">Geetha GPT</span>
-            <span class="text-[10px] text-amber-700 dark:text-amber-400 font-cinzel tracking-wider">Bhagavad Gita AI</span>
+            <span class="text-[9px] sm:text-[10px] text-amber-700 dark:text-amber-400 font-cinzel tracking-wider">Gitopadesh • Gita AI</span>
           </div>
         </div>
       </div>
@@ -77,31 +81,31 @@ export function renderNavbar(options = {}) {
 
       <!-- Center-Right: Global Search Bar -->
       <div class="flex-1 max-w-xs hidden md:block">
-        <button id="global-search-btn" class="w-full flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-stone-100/80 dark:bg-stone-800/70 border border-stone-200 dark:border-stone-700 text-stone-400 text-xs hover:border-amber-500/50 hover:bg-white dark:hover:bg-stone-800 transition shadow-inner">
+        <button id="global-search-btn" class="w-full flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-stone-100/80 dark:bg-stone-800/70 border border-stone-200 dark:border-stone-700 text-stone-400 text-xs hover:border-amber-500/50 hover:bg-white dark:hover:bg-stone-800 transition shadow-inner" aria-label="Search all Gita verses">
           <div class="flex items-center gap-2">
             <svg class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <span class="${getScriptFontClass(lang)}">${t.home ? t.home.searchInputPlaceholder : 'Search Gita...'}</span>
+            <span class="${getScriptFontClass(lang)} truncate max-w-[140px] text-left">${searchPlaceholder}</span>
           </div>
           <kbd class="px-1.5 py-0.5 rounded text-[9px] font-mono bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-stone-500">Ctrl K</kbd>
         </button>
       </div>
 
-      <!-- Right: Language Switcher, Theme Toggle & Ask Geetha Quick CTA -->
-      <div class="flex items-center gap-2 sm:gap-2.5">
+      <!-- Right: User Account, Language Switcher, Theme Toggle & Ask Geetha Quick CTA -->
+      <div class="flex items-center gap-1.5 sm:gap-2.5">
         <!-- Search icon for mobile -->
-        <button id="mobile-search-btn" class="md:hidden p-2 rounded-xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition">
+        <button id="mobile-search-btn" class="md:hidden p-2 rounded-xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition" aria-label="Search Gita">
           <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </button>
 
         <!-- Language Selector Button (23 Languages) -->
-        <button id="lang-toggle-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-amber-500/50 bg-stone-50/50 dark:bg-stone-800/50 text-xs font-bold text-stone-700 dark:text-stone-200 transition shadow-sm" title="Select Language / भाषा चुनें / భాషను ఎంచుకోండి">
+        <button id="lang-toggle-btn" class="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-amber-500/50 bg-stone-50/50 dark:bg-stone-800/50 text-xs font-bold text-stone-700 dark:text-stone-200 transition shadow-sm" title="Select Language / भाषा चुनें / భాషను ఎంచుకోండి">
           <span class="text-amber-600 dark:text-amber-400 text-sm">🌐</span>
-          <span class="${getScriptFontClass(lang)} font-semibold">${getLanguage(lang).nativeName}</span>
-          <span class="text-[10px] text-stone-400 font-mono font-normal uppercase">(${lang})</span>
+          <span class="${getScriptFontClass(lang)} font-semibold text-xs sm:text-sm">${getLanguage(lang).nativeName}</span>
+          <span class="hidden sm:inline text-[10px] text-stone-400 font-mono font-normal uppercase">(${lang})</span>
         </button>
 
         <!-- Theme Toggle (Light / Dark) -->
-        <button id="theme-toggle-btn" class="p-2 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-amber-500/50 bg-stone-50/50 dark:bg-stone-800/50 text-stone-600 dark:text-amber-300 hover:text-amber-600 transition shadow-sm" title="Toggle Theme">
+        <button id="theme-toggle-btn" class="p-2 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-amber-500/50 bg-stone-50/50 dark:bg-stone-800/50 text-stone-600 dark:text-amber-300 hover:text-amber-600 transition shadow-sm" title="Toggle Theme" aria-label="Toggle visual theme">
           ${
             theme === 'dark'
               ? `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>`
@@ -109,13 +113,20 @@ export function renderNavbar(options = {}) {
           }
         </button>
 
-        <!-- Quick Ask Geetha CTA -->
-        <button id="nav-ask-btn" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-bold text-xs shadow-md shadow-amber-600/20 transition hover-lift">
+        <!-- Multi-Language Voice Assistant Trigger Button -->
+        <button id="nav-voice-btn" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-amber-500/30 hover:border-amber-500 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-200 text-xs font-bold transition shadow-sm" title="Multi-Language Voice Assistant">
+          <span class="animate-pulse">🎙️</span>
+          <span class="hidden md:inline font-cinzel">Voice AI</span>
+        </button>
+
+        <!-- Quick Ask Geetha CTA (Desktop/Tablet - on mobile accessible via bottom bar) -->
+        <button id="nav-ask-btn" class="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-bold text-xs shadow-md shadow-amber-600/20 transition hover-lift">
           <span class="animate-flame">🪔</span>
-          <span class="${getScriptFontClass(lang)} font-semibold">${t.chat.title}</span>
+          <span class="${getScriptFontClass(lang)} font-semibold">${dict.chat ? dict.chat.title : 'Ask Geetha'}</span>
         </button>
       </div>
     </div>
+
   `;
 
   // Attach Event Handlers
@@ -125,6 +136,7 @@ export function renderNavbar(options = {}) {
   const mobileSearchBtn = navbar.querySelector('#mobile-search-btn');
   const langToggleBtn = navbar.querySelector('#lang-toggle-btn');
   const themeToggleBtn = navbar.querySelector('#theme-toggle-btn');
+  const navVoiceBtn = navbar.querySelector('#nav-voice-btn');
   const navAskBtn = navbar.querySelector('#nav-ask-btn');
 
   if (mobileMenuBtn) {
@@ -165,6 +177,18 @@ export function renderNavbar(options = {}) {
     themeToggleBtn.onclick = () => {
       soundSynthesizer.playChime();
       if (onToggleTheme) onToggleTheme();
+    };
+  }
+
+  if (navVoiceBtn) {
+    navVoiceBtn.onclick = () => {
+      soundSynthesizer.playChime();
+      voiceAssistantModal.open({
+        lang,
+        onNavigate: (route, params) => {
+          if (onNavigate) onNavigate(route, params);
+        }
+      });
     };
   }
 

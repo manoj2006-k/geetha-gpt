@@ -6,6 +6,7 @@
 
 import { LANGUAGES, getLanguage, isRTL, getScriptFontClass } from '../data/languages.js';
 import { storageManager } from '../utils/storageUtil.js';
+import { I18N, t } from '../data/i18n.js';
 
 export class LanguageModal {
   constructor() {
@@ -58,10 +59,16 @@ export class LanguageModal {
 
     const currentLangObj = getLanguage(this.currentLang);
     const recentCodes = this.getRecentLanguages();
+    const dict = I18N[this.currentLang] || I18N.en;
 
     const overlay = document.createElement('div');
     overlay.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm transition-opacity duration-200';
     overlay.id = 'language-selection-modal';
+
+    const titleText = t('common.selectLanguage', this.currentLang) || 'Select Language';
+    const searchPlaceholder = t('settings.searchLanguage', this.currentLang) || 'Search languages...';
+    const currentLabel = t('settings.currentLanguage', this.currentLang) || 'Current Language';
+    const closeLabel = t('common.close', this.currentLang) || 'Close';
 
     overlay.innerHTML = `
       <div class="relative w-full max-w-xl bg-white dark:bg-[#1A1816] rounded-3xl shadow-2xl border border-amber-500/30 overflow-hidden flex flex-col max-h-[85vh] animate-scale-up">
@@ -74,7 +81,7 @@ export class LanguageModal {
             </div>
             <div>
               <h2 class="text-lg font-bold text-stone-900 dark:text-stone-100 font-cinzel tracking-tight flex items-center gap-2">
-                <span>Select Language</span>
+                <span>${titleText}</span>
                 <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 font-sans font-semibold">
                   23 Languages
                 </span>
@@ -85,7 +92,7 @@ export class LanguageModal {
             </div>
           </div>
 
-          <button id="lang-modal-close-btn" class="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition" title="Close">
+          <button id="lang-modal-close-btn" class="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 transition" title="${closeLabel}" aria-label="${closeLabel}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
         </div>
@@ -99,7 +106,7 @@ export class LanguageModal {
             <input 
               type="text" 
               id="lang-search-input" 
-              placeholder="Search language by name, script, or code (e.g. Hindi, தமிழ், te)..." 
+              placeholder="${searchPlaceholder}" 
               class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-[#201D1A] border border-stone-200 dark:border-stone-700 text-stone-900 dark:text-stone-100 placeholder-stone-400 text-xs sm:text-sm focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none transition"
               autocomplete="off"
             />
@@ -112,7 +119,7 @@ export class LanguageModal {
           <!-- Quick Picks / Recently Used -->
           <div id="lang-recents-section" class="space-y-1.5">
             <span class="text-[11px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400 font-cinzel">
-              ✦ Recently Used
+              ✦ ${this.currentLang === 'te' ? 'ఇటీవల ఉపయోగించినవి' : (this.currentLang === 'hi' ? 'हाल में प्रयुक्त' : 'Recently Used')}
             </span>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="lang-recents-grid"></div>
           </div>
@@ -120,7 +127,7 @@ export class LanguageModal {
           <!-- All Languages List -->
           <div class="space-y-1.5 pt-2">
             <span class="text-[11px] font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500 font-cinzel">
-              All 23 Supported Languages
+              ${this.currentLang === 'te' ? 'మొత్తం 23 మద్దతు ఉన్న భాషలు' : (this.currentLang === 'hi' ? 'सभी 23 समर्थित भाषाएं' : 'All 23 Supported Languages')}
             </span>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2" id="lang-all-grid"></div>
           </div>
@@ -130,7 +137,7 @@ export class LanguageModal {
         <!-- Footer / Current Selection Info -->
         <div class="px-6 py-3 border-t border-stone-200/80 dark:border-stone-800 bg-stone-50 dark:bg-[#151413] flex items-center justify-between text-xs text-stone-500 dark:text-stone-400">
           <div class="flex items-center gap-2">
-            <span>Current:</span>
+            <span>${currentLabel}:</span>
             <span class="font-bold text-amber-700 dark:text-amber-400">
               ${currentLangObj.nativeName} (${currentLangObj.name})
             </span>
@@ -198,7 +205,7 @@ export class LanguageModal {
       if (filtered.length === 0) {
         allGrid.innerHTML = `
           <div class="col-span-full py-8 text-center text-stone-400 text-xs">
-            No languages matching "${filterQuery}"
+            No languages match "${filterQuery}"
           </div>
         `;
         return;
@@ -206,82 +213,77 @@ export class LanguageModal {
 
       filtered.forEach(langObj => {
         const isCurrent = langObj.code === this.currentLang;
-        const btn = document.createElement('button');
-        btn.dataset.langCode = langObj.code;
-        btn.className = `flex items-center justify-between p-3 rounded-2xl border transition text-left group ${
+        const card = document.createElement('button');
+        card.dataset.langCode = langObj.code;
+        card.className = `flex items-center justify-between p-3 rounded-2xl border transition-all text-left ${
           isCurrent 
-            ? 'bg-amber-500/15 border-amber-500/80 text-amber-900 dark:text-amber-200 font-bold shadow-sm' 
-            : 'bg-white dark:bg-[#201D1A] border-stone-200/80 dark:border-stone-800 hover:border-amber-500/50 hover:bg-amber-500/[0.04] text-stone-800 dark:text-stone-200'
+            ? 'bg-amber-500/15 border-amber-500/70 ring-2 ring-amber-500/20 text-stone-900 dark:text-stone-100 shadow-sm' 
+            : 'bg-white dark:bg-[#1E1B18] border-stone-200/80 dark:border-stone-800/80 hover:border-amber-500/50 text-stone-800 dark:text-stone-200 hover:shadow-sm'
         }`;
 
-        btn.innerHTML = `
-          <div class="flex items-center gap-3 truncate">
-            <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold ${
-              isCurrent ? 'bg-amber-500 text-white shadow-sm' : 'bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400'
-            }">
+        card.innerHTML = `
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold text-xs flex-shrink-0">
               ${langObj.code.toUpperCase()}
-            </div>
-            <div class="flex flex-col truncate">
+            </span>
+            <div class="flex flex-col min-w-0">
               <div class="flex items-center gap-1.5">
-                <span class="text-sm sm:text-base font-semibold ${langObj.fontClass}">${langObj.nativeName}</span>
-                ${langObj.dir === 'rtl' ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300">RTL</span>' : ''}
+                <span class="font-bold text-sm text-stone-900 dark:text-stone-100 ${langObj.fontClass} truncate">${langObj.nativeName}</span>
+                ${langObj.dir === 'rtl' ? '<span class="text-[9px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-800 dark:text-amber-300 font-mono">RTL</span>' : ''}
               </div>
-              <span class="text-[11px] text-stone-500 dark:text-stone-400 truncate">${langObj.name} • <span class="opacity-80">${langObj.script}</span></span>
+              <span class="text-xs text-stone-500 dark:text-stone-400 truncate">${langObj.name} • ${langObj.script}</span>
             </div>
           </div>
-          
-          <div class="flex items-center gap-2 flex-shrink-0">
-            ${langObj.hasVoiceSupport ? '<span class="text-[11px] text-amber-600/70 dark:text-amber-400/70" title="Voice Recognition Supported">🎙️</span>' : ''}
-            ${isCurrent ? '<span class="text-amber-600 dark:text-amber-400 font-bold text-base">✓</span>' : '<span class="text-stone-300 dark:text-stone-600 group-hover:text-amber-600 group-hover:translate-x-0.5 transition font-bold text-xs">→</span>'}
+
+          <div class="flex items-center gap-1.5 flex-shrink-0">
+            ${isCurrent ? '<span class="text-amber-600 dark:text-amber-400 font-bold text-base mr-1">✓</span>' : ''}
+            <span class="text-[10px] text-stone-400 group-hover:text-amber-600 font-cinzel">Select →</span>
           </div>
         `;
 
-        btn.onclick = () => this.selectLanguage(langObj.code);
-        allGrid.appendChild(btn);
+        card.onclick = () => this.selectLanguage(langObj.code);
+        allGrid.appendChild(card);
       });
     };
 
     renderRecents();
     renderLanguagesList();
 
-    // Event handlers
+    // Attach Search Filter
     searchInput.oninput = (e) => {
-      const val = e.target.value;
+      const q = e.target.value;
       const recentsSec = overlay.querySelector('#lang-recents-section');
-      if (val.trim()) {
-        recentsSec.classList.add('hidden');
-      } else {
-        recentsSec.classList.remove('hidden');
+      if (recentsSec) {
+        recentsSec.style.display = q.trim() ? 'none' : 'block';
       }
-      renderLanguagesList(val);
+      renderLanguagesList(q);
     };
 
-    closeBtn.onclick = () => this.close();
+    // Close button & Esc key
+    if (closeBtn) {
+      closeBtn.onclick = () => this.close();
+    }
 
     overlay.onclick = (e) => {
-      if (e.target === overlay) {
-        this.close();
-      }
+      if (e.target === overlay) this.close();
     };
 
-    const handleKeyDown = (e) => {
+    const handleKeydown = (e) => {
       if (e.key === 'Escape') {
         this.close();
-        document.removeEventListener('keydown', handleKeyDown);
+        window.removeEventListener('keydown', handleKeydown);
       }
     };
-    document.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeydown);
 
-    setTimeout(() => {
-      searchInput.focus();
-    }, 50);
+    setTimeout(() => searchInput.focus(), 100);
   }
 
   selectLanguage(code) {
+    this.currentLang = code;
     this.saveRecentLanguage(code);
     storageManager.setLanguage(code);
     this.close();
-
     if (typeof this.onSelectCallback === 'function') {
       this.onSelectCallback(code);
     }

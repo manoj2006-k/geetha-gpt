@@ -8,6 +8,7 @@ import { VERSES_DATA } from '../data/versesData.js';
 import { renderChatMessage } from '../components/ChatMessage.js';
 import { storageManager } from '../utils/storageUtil.js';
 import { soundSynthesizer } from '../utils/soundUtil.js';
+import { speechRecognizer, speechEngine } from '../utils/speechUtil.js';
 import { toastManager } from '../components/Toast.js';
 
 export function renderAskGeethaPage(options = {}) {
@@ -22,7 +23,7 @@ export function renderAskGeethaPage(options = {}) {
 
   const t = I18N[lang] || I18N.en;
   const page = document.createElement('div');
-  page.className = 'w-full flex-1 flex flex-col max-w-4xl mx-auto px-4 sm:px-6 pb-28 pt-2 page-fade-in relative min-h-[calc(100vh-5rem)]';
+  page.className = 'w-full flex-1 flex flex-col max-w-4xl mx-auto px-3 sm:px-6 pb-40 sm:pb-36 lg:pb-28 pt-2 page-fade-in relative min-h-[calc(100vh-5rem)]';
 
   // Initialize conversation: If historyId is passed from History, load that conversation. Otherwise, start fresh!
   let currentConversationId = historyId || ('chat-' + Date.now());
@@ -39,8 +40,8 @@ export function renderAskGeethaPage(options = {}) {
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-200/80 dark:border-stone-800 pb-4 mb-6">
       <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500 to-amber-700 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-amber-600/20">
-          <span class="animate-flame">🪔</span>
+        <div class="relative w-11 h-11 rounded-2xl overflow-hidden shadow-md shadow-amber-600/25 border-2 border-amber-400/60 flex-shrink-0 bg-stone-900">
+          <img src="./assets/images/krishna_arjuna_logo.jpg" alt="Gitopadesh" class="w-full h-full object-cover" />
         </div>
         <div class="flex flex-col">
           <h1 class="text-2xl font-extrabold text-stone-900 dark:text-stone-100 font-cinzel tracking-tight">
@@ -56,7 +57,7 @@ export function renderAskGeethaPage(options = {}) {
       <div class="flex items-center gap-2 self-start sm:self-auto">
         <button id="new-chat-btn" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-500/15 text-amber-900 dark:text-amber-200 hover:bg-amber-500/25 text-xs font-bold transition">
           <span>+</span>
-          <span>${lang === 'te' ? 'కొత్త సంభాషణ' : 'New Chat'}</span>
+          <span>${t.chat.newChat || 'New Chat'}</span>
         </button>
 
         <button id="clear-chat-btn" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-amber-500/50 text-xs font-semibold text-stone-600 dark:text-stone-300 hover:text-amber-600 transition">
@@ -108,8 +109,8 @@ export function renderAskGeethaPage(options = {}) {
       <button id="stop-voice-btn" class="p-1 rounded-full hover:bg-stone-700 text-stone-300 text-xs ml-2">✕</button>
     </div>
 
-    <!-- Bottom Sticky Chat Input Bar -->
-    <div class="fixed bottom-0 left-0 right-0 z-20 p-4 bg-gradient-to-t from-[#FAF7F2] via-[#FAF7F2]/95 to-transparent dark:from-[#121110] dark:via-[#121110]/95 lg:pl-68">
+    <!-- Bottom Sticky Chat Input Bar (Mobile positioned above bottom nav bar) -->
+    <div class="fixed bottom-[calc(3.75rem+env(safe-area-inset-bottom,0px))] lg:bottom-0 left-0 right-0 z-20 p-2.5 sm:p-4 bg-gradient-to-t from-[#FAF7F2] via-[#FAF7F2]/95 to-transparent dark:from-[#121110] dark:via-[#121110]/95 lg:pl-68 chat-bottom-input-bar">
       <div class="max-w-3xl mx-auto flex items-center gap-2 bg-white dark:bg-[#1A1816] rounded-2xl shadow-2xl border border-amber-500/30 p-2 focus-within:border-amber-500 focus-within:ring-4 focus-within:ring-amber-500/15 transition-all">
         <!-- Voice Input Mic Icon Button -->
         <button id="chat-mic-btn" class="p-2.5 rounded-xl text-stone-500 hover:text-amber-600 dark:text-stone-400 dark:hover:text-amber-400 hover:bg-amber-500/10 transition relative group" title="${t.chat.micTooltip}">
@@ -161,11 +162,11 @@ export function renderAskGeethaPage(options = {}) {
           <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100 font-cinzel">
             Geetha GPT
           </h2>
-          <p class="text-base sm:text-lg text-amber-800 dark:text-amber-300 font-medium ${lang === 'te' ? 'font-telugu' : ''}">
-            ${lang === 'te' ? 'భగవద్గీత దివ్య జ్ఞానాన్ని అన్వేషించడానికి నేను మీకు ఎలా సహాయపడగలను?' : 'How can I help you explore the wisdom of the Bhagavad Gita?'}
+          <p class="text-base sm:text-lg text-amber-800 dark:text-amber-300 font-medium">
+            ${t.chat.welcomeSubtitle || (lang === 'te' ? 'భగవద్గీత దివ్య జ్ఞానాన్ని అన్వేషించడానికి నేను మీకు ఎలా సహాయపడగలను?' : 'How can I help you explore the wisdom of the Bhagavad Gita?')}
           </p>
           <p class="text-xs sm:text-sm text-stone-500 dark:text-stone-400 leading-relaxed">
-            ${lang === 'te' ? 'మీ జీవిత సమస్యలు, మానసిక సందిగ్ధతలు, లేదా ధర్మ సందేహాల గురించి అడగండి.' : 'Ask about life challenges, anxiety, relationships, career dilemmas, or spiritual wisdom.'}
+            ${t.chat.welcomePrompt || (lang === 'te' ? 'మీ జీవిత సమస్యలు, మానసిక సందిగ్ధతలు, లేదా ధర్మ సందేహాల గురించి అడగండి.' : 'Ask about life challenges, anxiety, relationships, career dilemmas, or spiritual wisdom.')}
           </p>
         </div>
 
@@ -316,29 +317,61 @@ export function renderAskGeethaPage(options = {}) {
     toastManager.show(lang === 'te' ? "సంభాషణ క్లియర్ చేయబడింది" : "Conversation cleared", "info");
   };
 
-  // Simulated Mic Voice Input
+  // Multi-Language Voice Assistant Speech Recognition
   let isListening = false;
   micBtn.onclick = () => {
     isListening = !isListening;
     if (isListening) {
       waveformOverlay.classList.remove('hidden');
       soundSynthesizer.playChime();
-      setTimeout(() => {
-        if (isListening) {
-          waveformOverlay.classList.add('hidden');
+      const started = speechRecognizer.start({
+        lang,
+        onStart: () => {
+          waveformOverlay.classList.remove('hidden');
+        },
+        onResult: (res) => {
+          userInput.value = res.transcript;
+          if (res.isFinal && res.transcript.trim()) {
+            speechRecognizer.stop();
+            waveformOverlay.classList.add('hidden');
+            isListening = false;
+            handleSendMessage(res.transcript.trim());
+          }
+        },
+        onError: (err) => {
           isListening = false;
-          const sampleSpeech = lang === 'te' ? 'నాకు మనశ్శాంతిని పొందేందుకు భగవద్గీత మార్గం ఏమిటి?' : 'How do I cultivate peace of mind and overcome anxiety?';
-          userInput.value = sampleSpeech;
-          handleSendMessage(sampleSpeech);
+          waveformOverlay.classList.add('hidden');
+          toastManager.show(t('voice.unsupported', lang) || 'Voice recognition not available in this browser; typing mode ready.', 'warning');
+        },
+        onEnd: () => {
+          isListening = false;
+          waveformOverlay.classList.add('hidden');
         }
-      }, 2500);
+      });
+
+      if (!started) {
+        // Graceful fallback simulation
+        setTimeout(() => {
+          if (isListening) {
+            waveformOverlay.classList.add('hidden');
+            isListening = false;
+            const sampleSpeech = lang === 'te' 
+              ? 'నాకు మనశ్శాంతిని పొందేందుకు భగవద్గీత మార్గం ఏమిటి?' 
+              : (lang === 'hi' ? 'मन की शांति और चिंता से मुक्ति का गीता में क्या उपाय है?' : 'How do I cultivate peace of mind and overcome anxiety?');
+            userInput.value = sampleSpeech;
+            handleSendMessage(sampleSpeech);
+          }
+        }, 2500);
+      }
     } else {
+      speechRecognizer.stop();
       waveformOverlay.classList.add('hidden');
     }
   };
 
   stopVoiceBtn.onclick = () => {
     isListening = false;
+    speechRecognizer.stop();
     waveformOverlay.classList.add('hidden');
   };
 

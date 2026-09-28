@@ -98,10 +98,12 @@ def main():
         "utils/speechUtil.js",
         "utils/quoteCanvas.js",
         "components/Toast.js",
+        "components/VoiceButton.js",
         "components/ShareModal.js",
         "components/SearchBarModal.js",
         # LanguageModal must come before Navbar, Sidebar, MobileNav
         "components/LanguageModal.js",
+        "components/VoiceAssistantModal.js",
         "components/Navbar.js",
         "components/Sidebar.js",
         "components/MobileNav.js",
@@ -129,7 +131,17 @@ def main():
 
     # Combine master VERSES_DATA definition right after chapters using Array.concat
     chapter_arrays = [f"CHAPTER_{c:02d}" for c in range(1, 19)]
-    verses_data_def = f"\n  const VERSES_DATA = [].concat(\n    " + ",\n    ".join(chapter_arrays) + "\n  );\n"
+    verses_data_def = f"""
+  const VERSES_DATA = [].concat(
+    """ + ",\n    ".join(chapter_arrays) + """
+  );
+  VERSES_DATA.forEach(v => {
+    if (!v.englishExplanation && v.meaning) v.englishExplanation = v.meaning;
+    if (!v.meaning && v.englishExplanation) v.meaning = v.englishExplanation;
+    if (!v.englishTranslation && v.translation) v.englishTranslation = v.translation;
+    if (!v.translation && v.englishTranslation) v.translation = v.englishTranslation;
+  });
+"""
 
     inserted_verses_data = False
 
@@ -146,7 +158,8 @@ def main():
             bundle_parts.append(verses_data_def)
             inserted_verses_data = True
 
-    bundle_parts.append("\n  window.GeethaApp = GeethaApp;\n  window.storageManager = storageManager;\n  window.renderAskGeethaPage = renderAskGeethaPage;\n  window.renderHistoryPage = renderHistoryPage;\n})();\n")
+    bundle_parts.append("\n  window.GeethaApp = GeethaApp;\n  window.storageManager = storageManager;\n\n  window.speechEngine = speechEngine;\n  window.I18N = I18N;\n  window.getSlogan = getSlogan;\n  window.ORIGINAL_SLOGAN = ORIGINAL_SLOGAN;\n  window.ORIGINAL_TAGLINE = ORIGINAL_TAGLINE;\n  window.voiceAssistantModal = voiceAssistantModal;\n  window.renderAskGeethaPage = renderAskGeethaPage;\n  window.renderHistoryPage = renderHistoryPage;\n})();\n")
+
 
     full_bundle = "\n".join(bundle_parts)
 

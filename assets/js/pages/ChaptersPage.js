@@ -6,23 +6,25 @@
 import { CHAPTERS_DATA } from '../data/chaptersData.js';
 import { renderChapterCard } from '../components/ChapterCard.js';
 import { soundSynthesizer } from '../utils/soundUtil.js';
+import { I18N, t } from '../data/i18n.js';
 
 export function renderChaptersPage(options = {}) {
   const { lang = 'en', onNavigate = null } = options;
 
+  const dict = I18N[lang] || I18N.en;
+  const chaptersDict = dict.chapters || {};
+
   const page = document.createElement('div');
   page.className = 'w-full flex flex-col gap-8 pb-16 page-fade-in max-w-6xl mx-auto px-4 sm:px-6';
 
-  let currentCategory = 'All Chapters';
+  let currentCategory = 'all';
   let searchQuery = '';
 
   const categories = [
-    'All Chapters',
-    'Knowledge',
-    'Action',
-    'Meditation',
-    'Devotion',
-    'Self-Realization'
+    { id: 'all', label: chaptersDict.filterAll || 'All (18)' },
+    { id: 'Karma Yoga', label: chaptersDict.filterKarma || 'Karma Yoga' },
+    { id: 'Bhakti Yoga', label: chaptersDict.filterBhakti || 'Bhakti Yoga' },
+    { id: 'Jnana Yoga', label: chaptersDict.filterJnana || 'Jnana Yoga' }
   ];
 
   page.innerHTML = `
@@ -30,13 +32,13 @@ export function renderChaptersPage(options = {}) {
     <div class="flex flex-col gap-2 mt-2">
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 text-xs font-semibold w-max">
         <span>📖</span>
-        <span class="font-cinzel">18 Chapters • 700 Verses</span>
+        <span class="font-cinzel">18 ${dict.common?.dialoguesLogged ? 'Chapters' : 'Chapters'} • 700 ${dict.common?.versesCount || 'Verses'}</span>
       </div>
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-stone-900 dark:text-stone-100 font-cinzel">
-        Explore the Bhagavad Gita
+        ${chaptersDict.title || 'Explore the Bhagavad Gita'}
       </h1>
       <p class="text-stone-600 dark:text-stone-300 text-sm sm:text-base">
-        18 Chapters • 700 Verses
+        ${chaptersDict.subtitle || '18 Chapters • 700 Verses'}
       </p>
     </div>
 
@@ -47,7 +49,7 @@ export function renderChaptersPage(options = {}) {
         <input 
           type="text" 
           id="chapters-search-input" 
-          placeholder="Search chapters..." 
+          placeholder="${chaptersDict.searchPlaceholder || 'Search chapters by name or theme...'}" 
           class="w-full pl-11 pr-4 py-3 rounded-2xl bg-white dark:bg-[#1A1816] border border-stone-200/90 dark:border-stone-800 text-stone-900 dark:text-stone-100 placeholder-stone-400 text-sm font-medium shadow-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/15 transition" 
         />
         <svg class="w-5 h-5 text-amber-600 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,17 +61,17 @@ export function renderChaptersPage(options = {}) {
       <div class="flex flex-wrap items-center gap-2" id="filter-buttons-container">
         ${categories
           .map(cat => {
-            const isActive = cat === currentCategory;
+            const isActive = cat.id === currentCategory;
             return `
             <button 
-              data-cat="${cat}" 
+              data-cat="${cat.id}" 
               class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm ${
                 isActive
                   ? 'bg-amber-600 text-white shadow-amber-600/20'
                   : 'bg-white dark:bg-[#1A1816] text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white border border-stone-200/80 dark:border-stone-800 hover:border-amber-500/40'
               }"
             >
-              ${cat}
+              ${cat.label}
             </button>
           `;
           })
@@ -99,7 +101,7 @@ export function renderChaptersPage(options = {}) {
     const filtered = CHAPTERS_DATA.filter(ch => {
       // Category Match
       const matchesCategory =
-        currentCategory === 'All Chapters' ||
+        currentCategory === 'all' ||
         (ch.categories && ch.categories.includes(currentCategory)) ||
         ch.category === currentCategory;
 
@@ -125,12 +127,12 @@ export function renderChaptersPage(options = {}) {
           <span class="text-3xl">🔍</span>
           <h3 class="text-lg font-bold font-cinzel text-stone-800 dark:text-stone-200">No chapters match your search</h3>
           <p class="text-xs text-stone-500">Try searching for "Bhakti", "Meditation", "Knowledge", or numbers 1-18.</p>
-          <button id="reset-search-btn" class="mt-2 px-4 py-2 rounded-xl bg-amber-500/15 text-amber-900 dark:text-amber-200 text-xs font-bold">Clear Filters</button>
+          <button id="reset-search-btn" class="mt-2 px-4 py-2 rounded-xl bg-amber-500/15 text-amber-900 dark:text-amber-200 text-xs font-bold">${dict.common?.clear || 'Clear Filters'}</button>
         </div>
       `;
       gridMount.querySelector('#reset-search-btn').onclick = () => {
         searchQuery = '';
-        currentCategory = 'All Chapters';
+        currentCategory = 'all';
         searchInput.value = '';
         updateActiveButton();
         renderGrid();

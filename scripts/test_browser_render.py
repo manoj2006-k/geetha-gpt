@@ -5,7 +5,7 @@ import sys
 sys.stdout.reconfigure(encoding='utf-8')
 
 edge_path = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
-cmd = [edge_path, "--headless=new", "--disable-gpu", "--dump-dom", "http://localhost:8080"]
+cmd = [edge_path, "--headless=new", "--disable-gpu", "--dump-dom", "http://localhost:8000"]
 res = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8')
 dom = res.stdout
 

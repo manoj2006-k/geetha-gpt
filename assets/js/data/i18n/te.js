@@ -1,6 +1,6 @@
 export const TE = {
   "appTitle": "గీతా GPT",
-  "tagline": "ఆధునిక జీవన సవాళ్లకు భగవద్గీత శాశ్వత మార్గదర్శకత్వం",
+  "tagline": "Timeless Bhagavad Gita Guidance for Modern Life",
   "nav": {
     "home": "హోమ్",
     "askGeetha": "గీతను అడగండి",
@@ -12,7 +12,7 @@ export const TE = {
     "settings": "సెట్టింగులు"
   },
   "home": {
-    "heroTitle": "ప్రతి ప్రశ్నకు గీతా సమాధానం",
+    "heroTitle": "Wisdom for Every Question",
     "heroSubtitle": "జీవితంలోని సవాళ్లు, ఆందోళనలు, ధర్మసంకటాలకు భగవద్గీత నుండి దివ్య జ్ఞానాన్ని పొందండి.",
     "searchInputPlaceholder": "గీతా GPTని ఏదైనా అడగండి...",
     "askBtn": "గీతను అడగండి",
@@ -172,6 +172,74 @@ export const TE = {
     "search": "వెతకండి",
     "selectLanguage": "భాషను ఎంచుకోండి",
     "translationUnavailable": "ఈ భాషలో అనువాదం ఇంకా అందుబాటులో లేదు.",
-    "fallbackNotice": "ప్రామాణిక ఆంగ్ల అనువాదం చూపబడుతోంది."
-  }
+    "fallbackNotice": "ప్రామాణిక ఆంగ్ల అనువాదం చూపబడుతోంది.",
+    "exploreChapter": "అధ్యాయం చూడండి",
+    "curatedVerses": "ఎంపిక చేసిన శ్లోకాలు",
+    "versesCount": "శ్లోకాలు",
+    "backToAllChapters": "అన్ని అధ్యాయాలు",
+    "backToAllTopics": "అన్ని అంశాలు",
+    "askGeethaAbout": "దీని గురించి గీతను అడగండి:",
+    "viewWisdom": "జ్ఞానాన్ని చూడండి",
+    "today": "నేడు",
+    "yesterday": "నిన్న",
+    "back": "వెనుకకు",
+    "explore": "చూడండి",
+    "open": "తెరవండి",
+    "clear": "క్లియర్ చేయండి",
+    "delete": "తొలగించండి",
+    "messages": "సందేశాలు",
+    "dialoguesLogged": "సంభాషణలు నమోదు చేయబడ్డాయి"
+  },
+  "auth": {
+    "login": "లాగిన్",
+    "signup": "ఖాతా సృష్టించండి",
+    "logout": "లాగ్ అవుట్",
+    "account": "ఖాతా నిర్వహణ",
+    "switchAccount": "ఖాతా మార్చండి",
+    "currentAccount": "ప్రస్తుత వినియోగదారు",
+    "guest": "అతిథి మోడ్",
+    "guestNotice": "అతిథి మోడ్ (చరిత్ర భద్రపరచబడదు)",
+    "name": "మీ పేరు",
+    "emailOrUsername": "ఈమెయిల్ / ఖాతా గుర్తింపు",
+    "createSuccessButton": "ఖాతా సృష్టించి కొత్త చరిత్రను ప్రారంభించండి",
+    "createSuccess": "ఖాతా విజయవంతంగా సృష్టించబడింది!",
+    "loginSuccess": "విజయవంతంగా లాగిన్ అయ్యారు.",
+    "logoutSuccess": "లాగ్ అవుట్ విజయవంతమైంది.",
+    "switchSuccess": "ఖాతా మార్చబడింది:",
+    "historyEmptyNotice": "ప్రతి ఖాతాకు ప్రత్యేకమైన సంభాషణ చరిత్ర మరియు బుక్‌మార్క్‌లు ఉంటాయి.",
+    "accountIsolatedNotice": "ఖాతా వారీగా సురక్షితమైన చరిత్ర & బుక్‌మార్క్‌లు"
+  },
+  "voice": {
+    "listen": "వినండి",
+    "stop": "ఆపండి",
+    "playing": "వినిపిస్తోంది...",
+    "ariaListen": "ఈ భాగాన్ని వినండి",
+    "ariaStop": "ఆడియో ఆపండి",
+    "error": "ఈ బ్రౌజర్‌లో ఆడియో అందుబాటులో లేదు",
+    "unsupported": "ఈ భాషకు వాయిస్ అందుబాటులో లేదు",
+    "readingRecitation": "శ్లోక పఠనం",
+    "readingTranslation": "తాత్పర్యం"
+  },
+  "verseDetail": {
+    "previousVerse": "మునుపటి శ్లోకం",
+    "nextVerse": "తరువాతి శ్లోకం",
+    "previousChapter": "మునుపటి అధ్యాయం",
+    "nextChapter": "తరువాతి అధ్యాయం",
+    "relatedVersesTitle": "సంబంధిత శ్లోకాలు",
+    "exploreVerse": "శ్లోకం చూడండి",
+    "recitation": "శ్లోక పఠనం",
+    "wordMeanings": "ప్రతిపదార్థం",
+    "sanskritVerse": "సంస్కృత శ్లోకం",
+    "englishTranslation": "ఆంగ్ల అనువాదం",
+    "teluguTranslation": "తెలుగు తాత్పర్యం"
+  },
+  "footer": {
+    "aboutTitle": "గీతా GPT గురించి",
+    "aboutText": "ఆధునిక జీవన సవాళ్లకు భగవద్గీత నుండి శాశ్వత ఆధ్యాత్మిక జ్ఞానం మరియు మనస్తత్వ విశ్లేషణను అందించే అంతర్జాల వేదిక.",
+    "quickLinks": "ముఖ్యమైన లింకులు",
+    "legalDisclaimer": "ఆధ్యాత్మిక అన్వేషణ, వ్యక్తిత్వ వికాసం మరియు తత్వశాస్త్ర అధ్యయనం కొరకు మాత్రమే. వైద్య లేదా మానసిక చికిత్సకు ప్రత్యామ్నాయం కాదు.",
+    "allRightsReserved": "సర్వహక్కులు ప్రత్యేకించబడ్డాయి.",
+    "sanatanadharma": "సనాతన ధర్మం"
+  },
+  "slogan": "Wisdom for Every Question"
 };

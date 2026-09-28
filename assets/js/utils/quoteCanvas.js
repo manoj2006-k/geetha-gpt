@@ -65,7 +65,7 @@ export function generateQuoteCardImage(verse, lang = 'en', theme = 'light') {
 
   // Translation Text (Word wrap)
   currentY += 45;
-  const translationText = lang === 'te' ? (verse.teluguTranslation || verse.englishTranslation) : verse.englishTranslation;
+  const translationText = lang === 'te' ? (verse.teluguTranslation || verse.englishTranslation || verse.translation || '') : (verse.englishTranslation || verse.translation || '');
   ctx.fillStyle = isDark ? '#E5E0D8' : '#292524';
   ctx.font = lang === 'te' ? '24px "Noto Sans Telugu", sans-serif' : '22px "Plus Jakarta Sans", Georgia, serif';
   

@@ -2,7 +2,7 @@
  * Geetha GPT - Home Dashboard Page
  */
 
-import { I18N } from '../data/i18n.js';
+import { I18N, ORIGINAL_SLOGAN } from '../data/i18n.js';
 import { VERSES_DATA } from '../data/versesData.js';
 import { TOPICS_DATA } from '../data/topicsData.js';
 import { CHAPTERS_DATA } from '../data/chaptersData.js';
@@ -36,18 +36,26 @@ export function renderHomePage(options = {}) {
       <!-- Background Sacred Geometry Motif -->
       <div class="absolute -top-24 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <!-- Top Diya Badge -->
+      <!-- Sacred Gitopadesh Emblem: Lord Krishna teaching Bhagavad Gita to Arjuna -->
+      <div class="relative group mt-1">
+        <div class="absolute -inset-2 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 opacity-40 blur-lg group-hover:opacity-75 transition duration-700 animate-pulse"></div>
+        <div class="relative w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-amber-400/80 shadow-2xl shadow-amber-600/30 bg-stone-950 flex items-center justify-center">
+          <img src="./assets/images/krishna_arjuna_logo.jpg" alt="Lord Krishna teaching Bhagavad Gita to Arjuna (Gitopadesh)" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" />
+        </div>
+      </div>
+
+      <!-- Top Badge -->
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-300 text-xs sm:text-sm font-semibold shadow-sm">
         <span class="animate-flame">🪔</span>
-        <span class="${lang === 'te' ? 'font-telugu' : 'font-cinzel'}">${lang === 'te' ? 'భగవద్గీత ఆధారిత దివ్య మార్గదర్శకత్వం' : 'AI-Inspired Bhagavad Gita Wisdom Platform'}</span>
+        <span class="font-cinzel">Gitopadesh • AI-Inspired Bhagavad Gita Wisdom</span>
       </div>
 
       <!-- Title & Subtitle -->
       <div class="flex flex-col gap-3 max-w-3xl">
-        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-stone-900 dark:text-stone-100 font-cinzel leading-tight tracking-tight">
-          ${t.home.heroTitle}
+        <h1 id="hero-slogan" class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-stone-900 dark:text-stone-100 font-cinzel leading-tight tracking-tight">
+          ${ORIGINAL_SLOGAN}
         </h1>
-        <p class="text-base sm:text-lg text-stone-600 dark:text-stone-300 max-w-2xl mx-auto leading-relaxed ${lang === 'te' ? 'font-telugu' : ''}">
+        <p class="text-base sm:text-lg text-stone-600 dark:text-stone-300 max-w-2xl mx-auto leading-relaxed">
           ${t.home.heroSubtitle}
         </p>
       </div>
@@ -77,7 +85,7 @@ export function renderHomePage(options = {}) {
           ${CHAT_SUGGESTIONS.slice(0, 3)
             .map(
               sug => `
-              <button class="hero-chip-btn px-3 py-1 rounded-full bg-white/80 dark:bg-stone-800/80 hover:bg-amber-500/15 text-stone-700 dark:text-stone-300 hover:text-amber-800 dark:hover:text-amber-200 border border-stone-200 dark:border-stone-700 text-xs font-medium transition shadow-sm ${lang === 'te' ? 'font-telugu' : ''}" data-prompt="${lang === 'te' ? sug.te : sug.en}">
+              <button class="hero-chip-btn px-3 py-1 rounded-full bg-white/80 dark:bg-stone-800/80 hover:bg-amber-500/15 text-stone-700 dark:text-stone-300 hover:text-amber-800 dark:hover:text-amber-200 border border-stone-200 dark:border-stone-700 text-xs font-medium transition shadow-sm" data-prompt="${lang === 'te' ? sug.te : sug.en}">
                 "${lang === 'te' ? sug.te : sug.en}"
               </button>
             `
@@ -130,7 +138,7 @@ export function renderHomePage(options = {}) {
         </div>
 
         <button id="view-daily-wisdom-btn" class="text-xs sm:text-sm font-bold text-amber-700 dark:text-amber-400 hover:underline flex items-center gap-1">
-          <span>${lang === 'te' ? 'పూర్తి వివరణ' : 'Daily Contemplation'}</span>
+          <span>${t.dailyWisdom?.title || 'Daily Wisdom'}</span>
           <span>→</span>
         </button>
       </div>
@@ -145,12 +153,12 @@ export function renderHomePage(options = {}) {
         <div class="flex flex-col gap-1">
           <div class="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold uppercase tracking-wider font-cinzel text-xs">
             <span>✦</span>
-            <span>${lang === 'te' ? 'మానసిక విశ్లేషణ' : 'Spiritual Psychology'}</span>
+            <span>${t.topics?.subtitle ? 'Spiritual Psychology' : 'Spiritual Psychology'}</span>
           </div>
           <h2 class="text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-100 font-cinzel">
             ${t.home.lifeTopicsTitle}
           </h2>
-          <p class="text-xs sm:text-sm text-stone-500 dark:text-stone-400 ${lang === 'te' ? 'font-telugu' : ''}">
+          <p class="text-xs sm:text-sm text-stone-500 dark:text-stone-400">
             ${t.home.lifeTopicsSubtitle}
           </p>
         </div>
@@ -172,7 +180,7 @@ export function renderHomePage(options = {}) {
           <h2 class="text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-100 font-cinzel">
             ${t.home.chaptersPreviewTitle}
           </h2>
-          <p class="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-0.5 ${lang === 'te' ? 'font-telugu' : ''}">
+          <p class="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-0.5">
             ${t.home.chaptersPreviewSubtitle}
           </p>
         </div>
@@ -192,13 +200,13 @@ export function renderHomePage(options = {}) {
                 <span class="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-800 dark:text-amber-300 font-cinzel font-bold text-xs flex items-center justify-center">
                   ${ch.number}
                 </span>
-                <span class="text-[11px] font-semibold text-stone-400">${ch.verseCount} verses</span>
+                <span class="text-[11px] font-semibold text-stone-400">${ch.verseCount} ${t.common?.versesCount || 'verses'}</span>
               </div>
               <h4 class="font-bold text-stone-900 dark:text-stone-100 font-cinzel text-base">${lang === 'te' ? ch.teluguTitle : ch.englishTitle}</h4>
               <p class="text-xs text-stone-500 dark:text-stone-400 line-clamp-2">${lang === 'te' ? ch.teluguSummary : ch.englishSummary}</p>
             </div>
             <span class="text-xs font-bold text-amber-600 dark:text-amber-400 mt-3 flex items-center gap-1">
-              <span>Explore Chapter</span>
+              <span>${t.common?.exploreChapter || 'Explore Chapter'}</span>
               <span>→</span>
             </span>
           </div>
@@ -215,7 +223,13 @@ export function renderHomePage(options = {}) {
     theme,
     sanskritDisplay,
     showExplanation: true,
-    showPractical: true
+    showPractical: true,
+    onExploreVerse: (id) => {
+      const v = VERSES_DATA.find(item => item.id === id);
+      if (v && onNavigate) {
+        onNavigate('verseDetail', { chapterNumber: v.chapter, verseNumber: v.verse });
+      }
+    }
   });
   verseMount.appendChild(verseCard);
 

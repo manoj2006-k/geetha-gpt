@@ -1,6 +1,6 @@
 export const MR = {
   "appTitle": "गीता GPT",
-  "tagline": "आधुनिक जीवनासाठी श्रीमद्भगवद्गीतेचे मार्गदर्शन",
+  "tagline": "Timeless Bhagavad Gita Guidance for Modern Life",
   "nav": {
     "home": "मुख्यपृष्ठ",
     "askGeetha": "गीतेला विचारा",
@@ -12,7 +12,7 @@ export const MR = {
     "settings": "सेटिंग्ज"
   },
   "home": {
-    "heroTitle": "गीता GPT — आधुनिक जीवनासाठी श्रीमद्भगवद्गीतेचे मार्गदर्शन",
+    "heroTitle": "Wisdom for Every Question",
     "heroSubtitle": "Explore timeless wisdom from the Bhagavad Gita and discover practical guidance for everyday life.",
     "searchInputPlaceholder": "गीतेला विचारा…",
     "askBtn": "गीतेला विचारा",
@@ -172,6 +172,74 @@ export const MR = {
     "search": "शोधा",
     "selectLanguage": "मराठी (mr)",
     "translationUnavailable": "Translation currently unavailable in मराठी.",
-    "fallbackNotice": "Showing English translation as standard fallback."
-  }
+    "fallbackNotice": "Showing English translation as standard fallback.",
+    "exploreChapter": "अध्याय देखें",
+    "curatedVerses": "चयनित श्लोक",
+    "versesCount": "श्लोक",
+    "backToAllChapters": "सभी अध्याय",
+    "backToAllTopics": "सभी विषय",
+    "askGeethaAbout": "गीता से पूछें:",
+    "viewWisdom": "ज्ञान देखें",
+    "today": "आज",
+    "yesterday": "काल",
+    "back": "वापस",
+    "explore": "देखें",
+    "open": "खोलें",
+    "clear": "हटाएं",
+    "delete": "मिटाएं",
+    "messages": "संदेश",
+    "dialoguesLogged": "वार्तालाप दर्ज"
+  },
+  "auth": {
+    "login": "लॉग इन",
+    "signup": "खाते तयार करा",
+    "logout": "लॉग आउट",
+    "account": "खाते व्यवस्थापन",
+    "switchAccount": "खाता बदलें",
+    "currentAccount": "सक्रिय खाता",
+    "guest": "अतिथि मोड",
+    "guestNotice": "अतिथि मोड (इतिहास सुरक्षित नहीं होगा)",
+    "name": "आपका नाम",
+    "emailOrUsername": "ईमेल / पहचानकर्ता",
+    "createSuccessButton": "खाता बनाएं और नया इतिहास शुरू करें",
+    "createSuccess": "खाता सफलतापूर्वक बनाया गया!",
+    "loginSuccess": "सफलतापूर्वक लॉग इन हुआ।",
+    "logoutSuccess": "लॉग आउट सफल रहा।",
+    "switchSuccess": "खाता बदला गया:",
+    "historyEmptyNotice": "प्रत्येक खाते का अपना व्यक्तिगत इतिहास और बुकमार्क होते हैं।",
+    "accountIsolatedNotice": "खाता-आधारित सुरक्षित इतिहास और बुकमार्क"
+  },
+  "voice": {
+    "listen": "ऐका",
+    "stop": "थांबवा",
+    "playing": "बज रहा है...",
+    "ariaListen": "इस श्लोक को सुनें",
+    "ariaStop": "ऑडियो रोकें",
+    "error": "ब्राउज़र में ऑडियो उपलब्ध नहीं है",
+    "unsupported": "इस भाषा के लिए आवाज़ उपलब्ध नहीं है",
+    "readingRecitation": "श्लोक पाठ",
+    "readingTranslation": "अनुवाद"
+  },
+  "verseDetail": {
+    "previousVerse": "पिछला श्लोक",
+    "nextVerse": "अगला श्लोक",
+    "previousChapter": "पिछला अध्याय",
+    "nextChapter": "अगला अध्याय",
+    "relatedVersesTitle": "संबंधित श्लोक",
+    "exploreVerse": "श्लोक देखें",
+    "recitation": "श्लोक पाठ",
+    "wordMeanings": "शब्दार्थ",
+    "sanskritVerse": "संस्कृत श्लोक",
+    "englishTranslation": "अंग्रेज़ी अनुवाद",
+    "teluguTranslation": "तेलुगु अनुवाद"
+  },
+  "footer": {
+    "aboutTitle": "गीता GPT के बारे में",
+    "aboutText": "दैनिक जीवन की चुनौतियों के लिए भगवद्गीता से कालातीत आध्यात्मिक ज्ञान और व्यावहारिक मार्गदर्शन।",
+    "quickLinks": "त्वरित लिंक",
+    "legalDisclaimer": "आध्यात्मिक चिंतन और अध्ययन के लिए। यह पेशेवर परामर्श का विकल्प नहीं है।",
+    "allRightsReserved": "सर्वाधिकार सुरक्षित।",
+    "sanatanadharma": "सनातन धर्म"
+  },
+  "slogan": "Wisdom for Every Question"
 };

@@ -21,7 +21,7 @@ export function renderTopicsPage(options = {}) {
     <div class="flex flex-col gap-3 text-center sm:text-left mt-2">
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 text-xs font-semibold w-max self-center sm:self-start">
         <span>🧭</span>
-        <span class="${lang === 'te' ? 'font-telugu' : 'font-cinzel'}">${lang === 'te' ? '16 జీవిత అంశాలు' : '16 Life Areas & Emotions'}</span>
+        <span class="${lang === 'te' ? 'font-telugu' : 'font-cinzel'}">${(t.topics && t.topics.badge) || (lang === 'te' ? '16 జీవిత అంశాలు' : '16 Life Areas & Emotions')}</span>
       </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-stone-900 dark:text-stone-100 font-cinzel">
         ${t.topics.title}
@@ -58,15 +58,15 @@ export function renderTopicsPage(options = {}) {
     const list = TOPICS_DATA.filter(top =>
       !q ||
       top.name.toLowerCase().includes(q) ||
-      top.teluguName.includes(q) ||
-      top.sanskritName.toLowerCase().includes(q) ||
-      top.tagline.toLowerCase().includes(q)
+      (top.teluguName && top.teluguName.includes(q)) ||
+      (top.sanskritName && top.sanskritName.toLowerCase().includes(q)) ||
+      (top.tagline && top.tagline.toLowerCase().includes(q))
     );
 
     if (list.length === 0) {
       gridMount.innerHTML = `
         <div class="col-span-full py-16 text-center text-stone-500 dark:text-stone-400">
-          <p class="text-base font-semibold">No topics found matching "${searchQuery}"</p>
+          <p class="text-base font-semibold">${t.common?.noResults || 'No topics found matching'} "${searchQuery}"</p>
         </div>
       `;
       return;

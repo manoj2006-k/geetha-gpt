@@ -1,2 +1,21 @@
+# Environment and Secrets
+.env
+.env.local
+*.env
+
+# Data caches & scratch files
+_hindi_cache.json
+*.cache
+__pycache__/
+*.pyc
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Large Datasets
 dataset/large_2m/gita_2m_training.csv
 dataset/large_2m/gita_2m_training.parquet
+

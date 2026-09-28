@@ -1,0 +1,108 @@
+================================================================================
+                           GEETHA GPT - TECHNOLOGY STACK
+================================================================================
+Platform: Bhagavad Gita Wisdom Platform
+Architecture: 100% Client-Side Single Page Application (Zero Backend Dependencies)
+Status: Standalone Offline-Capable Web Application
+================================================================================
+
+1. CORE FRONTEND ARCHITECTURE
+--------------------------------------------------------------------------------
+- Core Language:          Modern Vanilla JavaScript (ECMAScript 2022+ / ES Modules)
+- Application Pattern:    Single Page Application (SPA) with Hashless Routing
+- State Management:       Centralized Reactive State Machine (`assets/js/app.js`)
+- Component Model:        Modular Functional UI Components (`assets/js/components/`)
+- Page Controllers:       View Controllers (`assets/js/pages/`)
+- Distribution Bundle:    Standalone Self-Contained Bundle (`assets/js/bundle.js`)
+                          (Runs seamlessly across http:// and file:// protocols)
+
+2. STYLING & USER INTERFACE
+--------------------------------------------------------------------------------
+- CSS Utility Engine:     Tailwind CSS (CDN v3 with Custom Theme Configuration)
+- Custom Stylesheets:     `assets/css/custom.css` (Glassmorphism, animations, borders)
+- Theme Modes:            Dual Theme (Light Warm Cream #FAF7F2 ↔ Dark Charcoal #121110)
+- Layout Modes:           Bidirectional: Left-to-Right (LTR) and Right-to-Left (RTL)
+- Responsive Design:      Mobile-first, Tablet, and Desktop responsive layouts
+
+3. TYPOGRAPHY & FONT SYSTEM
+--------------------------------------------------------------------------------
+- UI Sans-Serif Font:     Plus Jakarta Sans (Google Fonts)
+- Classical Serif Fonts:  Cinzel & Cinzel Decorative (Headings, titles, badges)
+- Indic & Multilingual:   Google Noto Fonts Family:
+                          * Noto Serif Devanagari (Sanskrit shlokas)
+                          * Noto Sans Devanagari  (Hindi, Marathi, Nepali, Dogri, etc.)
+                          * Noto Sans Telugu      (Telugu translations & UI)
+                          * Noto Sans Tamil       (Tamil UI)
+                          * Noto Sans Kannada     (Kannada UI)
+                          * Noto Sans Malayalam   (Malayalam UI)
+                          * Noto Sans Bengali     (Bengali & Assamese UI)
+                          * Noto Sans Gujarati    (Gujarati UI)
+                          * Noto Sans Gurmukhi    (Punjabi UI)
+                          * Noto Sans Oriya       (Odia UI)
+                          * Noto Sans Arabic      (Urdu & Sindhi Nastaliq/Arabic)
+                          * Noto Sans Meetei Mayek(Manipuri UI)
+                          * Noto Sans Ol Chiki    (Santhali UI)
+
+4. ICONS & VISUAL MEDIA
+--------------------------------------------------------------------------------
+- Iconography:            Lucide Icons (CDN distribution)
+- Graphic Generation:     HTML5 Canvas API (`quoteCanvas.js` for gold-bordered cards)
+- Micro-Interactions:     Canvas-Confetti (`canvas-confetti.browser.min.js`)
+- Favicon & Branding:     Inline Vector SVG (`🪔`)
+
+5. AUDIO & VOICE PROCESSING
+--------------------------------------------------------------------------------
+- Text-to-Speech (TTS):   Web Speech API (`speechSynthesis` / `SpeechSynthesisUtterance`)
+                          * Sentence-chunking engine for long Sanskrit/English texts
+                          * Multi-language voice selection with graceful fallback
+                          * Mutually-exclusive playback controller (`VoiceButton`)
+- Sound Synthesis:        Web Audio API (`AudioContext` harmonic oscillator synthesis)
+                          * Tibetan singing bowl chimes & temple bells
+                          * Zero external audio files required (100% procedural)
+
+6. ARTIFICIAL INTELLIGENCE & MACHINE LEARNING
+--------------------------------------------------------------------------------
+- Model Pipeline:         TF-IDF Vectorizer + SGDClassifier / Logistic Regression
+- Inference Engine:       Embedded Browser-Side JavaScript Inference Engine
+- Classification Target:  54 Mental State & Life Dilemma Intent Classes
+- Vocabulary Size:        5,000 Token N-Gram Feature Vectors
+- Training Data Scale:    Augmented Multi-Source Dataset (Up to 2,000,000 synthetic items)
+- Fine-Tuning Corpus:     `gita_finetuning_dataset.jsonl` (700 verses, 9.5 MB)
+- Model Storage:          Serialized JSON bundle (`data/ml_model_bundle.json`)
+                          and browser-ready JS export (`assets/js/data/mlModelData.js`)
+
+7. INTERNATIONALIZATION & LOCALIZATION (i18n)
+--------------------------------------------------------------------------------
+- Supported Languages:    23 Languages (All 22 Scheduled Indian Languages + English)
+- Dictionary System:      Centralized `I18N` dictionaries (`assets/js/data/i18n/`)
+- RTL Layout Support:     Automated RTL text direction and mirroring for Urdu & Sindhi
+
+8. CLIENT STORAGE & MULTI-USER ISOLATION
+--------------------------------------------------------------------------------
+- Storage Engine:         HTML5 LocalStorage API (`storageUtil.js`)
+- Multi-Account Support:  Isolated User Namespaces:
+                          * Account A (`_user_account_a`)
+                          * Account B (`_user_account_b`)
+                          * Guest Mode (`_user_guest`)
+                          * Dynamic User Profile Creation
+- Persisted States:       Chat History, Bookmarks, Chapter Progress, Notes, Settings
+
+9. LOCAL SERVER & DEVELOPMENT TOOLING
+--------------------------------------------------------------------------------
+- Dev HTTP Server:        Python 3 Built-in Server (`server.py` using `http.server`)
+                          * Auto port-scanning (8000–8020)
+                          * Cross-Origin Resource Sharing (CORS) headers
+                          * UTF-8 output encoding support
+- Windows Launcher:       Batch script (`start.bat`) for 1-click browser launch
+- Build Pipeline:         Custom Python bundler (`scripts/build_bundle.py`)
+                          (Strips ES module exports/imports into standalone bundle.js)
+- Model Training Scripts: Python 3, scikit-learn, pandas, numpy
+- Verification Test Suite:34+ Automated Python and DOM integration test scripts
+
+10. RUNTIME ENVIRONMENT REQUIREMENTS
+--------------------------------------------------------------------------------
+- Runtime Platform:       Any modern evergreen web browser (Chrome, Edge, Firefox, Safari)
+- Backend Requirements:   None (Client-side execution)
+- Internet Connection:    Required only for initial CDN resources (Fonts, Tailwind, Lucide)
+                          or fully offline when assets are cached locally.
+================================================================================
