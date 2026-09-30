@@ -122,8 +122,16 @@ export function renderTopicDetailPage(options = {}) {
       lang,
       theme,
       sanskritDisplay,
+      showTranslation: true,
       showExplanation: true,
-      showPractical: true
+      showPractical: true,
+      onExploreVerse: (vId) => {
+        soundSynthesizer.playChime();
+        if (onNavigate) {
+          const parts = vId.split('-');
+          onNavigate('verseDetail', { chapterNumber: parseInt(parts[0], 10), verseNumber: parseInt(parts[1], 10) });
+        }
+      }
     });
     versesMount.appendChild(card);
   });

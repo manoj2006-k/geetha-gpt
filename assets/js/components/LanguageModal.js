@@ -169,7 +169,7 @@ export class LanguageModal {
         const isCurrent = langObj.code === this.currentLang;
         const btn = document.createElement('button');
         btn.dataset.langCode = langObj.code;
-        btn.className = `flex items-center justify-between p-2.5 rounded-xl border transition text-left ${
+        btn.className = `lang-select-card lang-recent-btn flex items-center justify-between p-2.5 rounded-xl border transition text-left ${
           isCurrent 
             ? 'bg-amber-500/15 border-amber-500 text-amber-900 dark:text-amber-200 font-bold shadow-sm' 
             : 'bg-stone-50 dark:bg-[#201D1A] border-stone-200/80 dark:border-stone-800 hover:border-amber-500/50 text-stone-800 dark:text-stone-200'
@@ -215,7 +215,7 @@ export class LanguageModal {
         const isCurrent = langObj.code === this.currentLang;
         const card = document.createElement('button');
         card.dataset.langCode = langObj.code;
-        card.className = `flex items-center justify-between p-3 rounded-2xl border transition-all text-left ${
+        card.className = `lang-select-card flex items-center justify-between p-3 rounded-2xl border transition-all text-left ${
           isCurrent 
             ? 'bg-amber-500/15 border-amber-500/70 ring-2 ring-amber-500/20 text-stone-900 dark:text-stone-100 shadow-sm' 
             : 'bg-white dark:bg-[#1E1B18] border-stone-200/80 dark:border-stone-800/80 hover:border-amber-500/50 text-stone-800 dark:text-stone-200 hover:shadow-sm'

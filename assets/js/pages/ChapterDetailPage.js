@@ -297,6 +297,7 @@ export function renderChapterDetailPage(options = {}) {
         lang,
         theme,
         sanskritDisplay,
+        showTranslation: activeFilter !== 'sanskrit',
         showExplanation: activeFilter === 'all' || activeFilter === 'meaning',
         showPractical: activeFilter === 'all',
         onSaveChange: () => {

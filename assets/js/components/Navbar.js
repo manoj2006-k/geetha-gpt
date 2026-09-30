@@ -30,7 +30,8 @@ export function renderNavbar(options = {}) {
     { id: 'topics', label: navText.topics || 'Topics' },
     { id: 'dailyWisdom', label: navText.dailyWisdom || 'Daily Wisdom' },
     { id: 'saved', label: navText.savedVerses || 'Saved Verses' },
-    { id: 'history', label: navText.history || 'History' }
+    { id: 'history', label: navText.history || 'History' },
+    { id: 'settings', label: navText.settings || 'Settings' }
   ];
 
   const navbar = document.createElement('header');
@@ -113,6 +114,11 @@ export function renderNavbar(options = {}) {
           }
         </button>
 
+        <!-- Settings Quick Button -->
+        <button id="nav-settings-btn" class="p-2 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-amber-500/50 bg-stone-50/50 dark:bg-stone-800/50 text-stone-600 dark:text-stone-300 hover:text-amber-600 transition shadow-sm" title="${navText.settings || 'Settings'}" aria-label="Open Settings">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        </button>
+
         <!-- Multi-Language Voice Assistant Trigger Button -->
         <button id="nav-voice-btn" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl border border-amber-500/30 hover:border-amber-500 bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-200 text-xs font-bold transition shadow-sm" title="Multi-Language Voice Assistant">
           <span class="animate-pulse">🎙️</span>
@@ -136,6 +142,7 @@ export function renderNavbar(options = {}) {
   const mobileSearchBtn = navbar.querySelector('#mobile-search-btn');
   const langToggleBtn = navbar.querySelector('#lang-toggle-btn');
   const themeToggleBtn = navbar.querySelector('#theme-toggle-btn');
+  const navSettingsBtn = navbar.querySelector('#nav-settings-btn');
   const navVoiceBtn = navbar.querySelector('#nav-voice-btn');
   const navAskBtn = navbar.querySelector('#nav-ask-btn');
 
@@ -177,6 +184,13 @@ export function renderNavbar(options = {}) {
     themeToggleBtn.onclick = () => {
       soundSynthesizer.playChime();
       if (onToggleTheme) onToggleTheme();
+    };
+  }
+
+  if (navSettingsBtn) {
+    navSettingsBtn.onclick = () => {
+      soundSynthesizer.playChime();
+      if (onNavigate) onNavigate('settings');
     };
   }
 

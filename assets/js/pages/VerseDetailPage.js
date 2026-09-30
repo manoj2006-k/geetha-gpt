@@ -683,8 +683,14 @@ export function renderVerseDetailPage(options = {}) {
           ? 'bg-amber-500/15 border border-amber-500/40 text-amber-700 dark:text-amber-300'
           : 'bg-white dark:bg-[#1A1816] border border-stone-200/90 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-amber-500/50 hover:text-amber-600'
       }`;
-      saveBtn.querySelector('svg').className = `w-4 h-4 ${nowSaved ? 'fill-current' : 'fill-none'}`;
-      saveBtn.querySelector('span').textContent = nowSaved ? savedLabel : saveLabel;
+      const svgEl = saveBtn.querySelector('svg');
+      if (svgEl) {
+        svgEl.setAttribute('class', `w-4 h-4 ${nowSaved ? 'fill-current' : 'fill-none'}`);
+      }
+      const spanEl = saveBtn.querySelector('span');
+      if (spanEl) {
+        spanEl.textContent = nowSaved ? savedLabel : saveLabel;
+      }
     };
   }
 

@@ -17,7 +17,7 @@ export function renderVerseCard(verse, options = {}) {
     lang = 'en',
     theme = 'light',
     sanskritDisplay = 'devanagari',
-    showTranslation = false,
+    showTranslation = true,
     showExplanation = true,
     showPractical = true,
     onSaveChange = null,
@@ -325,8 +325,14 @@ export function renderVerseCard(verse, options = {}) {
           ? 'bg-amber-500/15 border-amber-500/40 text-amber-700 dark:text-amber-300'
           : 'border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:border-amber-500/40 hover:text-amber-600'
       }`;
-      saveBtn.querySelector('svg').className = `w-3.5 h-3.5 ${nowSaved ? 'fill-current' : 'fill-none'}`;
-      saveBtn.querySelector('span').textContent = nowSaved ? savedLabel : saveLabel;
+      const svgEl = saveBtn.querySelector('svg');
+      if (svgEl) {
+        svgEl.setAttribute('class', `w-3.5 h-3.5 ${nowSaved ? 'fill-current' : 'fill-none'}`);
+      }
+      const spanEl = saveBtn.querySelector('span');
+      if (spanEl) {
+        spanEl.textContent = nowSaved ? savedLabel : saveLabel;
+      }
 
       if (onSaveChange) onSaveChange(verse.id, nowSaved);
     };

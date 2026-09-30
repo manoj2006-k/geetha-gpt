@@ -92,6 +92,12 @@ export function renderDailyWisdomPage(options = {}) {
               <span>${t.home?.share || 'Share'}</span>
             </button>
 
+            <!-- View Full Verse Detail -->
+            <button id="daily-explore-btn" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-900 dark:text-amber-200 text-xs font-bold transition">
+              <span>📖</span>
+              <span>${t.verseDetail?.exploreVerse || 'View Verse'} →</span>
+            </button>
+
             <!-- Sanskrit Recitation Voice Button Mount -->
             <div id="daily-sanskrit-voice-mount"></div>
           </div>
@@ -247,6 +253,17 @@ export function renderDailyWisdomPage(options = {}) {
     // Reattach Event Handlers
     const shareBtn = page.querySelector('#daily-share-btn');
     const saveBtn = page.querySelector('#daily-save-btn');
+
+    const exploreBtn = page.querySelector('#daily-explore-btn');
+
+    if (exploreBtn) {
+      exploreBtn.onclick = () => {
+        soundSynthesizer.playChime();
+        if (onNavigate) {
+          onNavigate('verseDetail', { chapterNumber: verseObj.chapter, verseNumber: verseObj.verse });
+        }
+      };
+    }
 
     if (shareBtn) {
       shareBtn.onclick = () => {

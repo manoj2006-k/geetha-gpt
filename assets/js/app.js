@@ -44,6 +44,9 @@ class GeethaApp {
     // Apply Language (RTL, lang attr, font class)
     this.applyLanguage(this.settings.language || 'en');
 
+    // Apply Font Size
+    this.applyFontSize(this.settings.fontSize || 'medium');
+
     // Apply Sound setting
     soundSynthesizer.setEnabled(this.settings.soundEnabled);
     // Setup Global Keybinds (Ctrl+K / Cmd+K)
@@ -69,6 +72,20 @@ class GeethaApp {
       document.documentElement.classList.remove('dark');
       document.documentElement.classList.add('light');
     }
+  }
+
+  applyFontSize(size = 'medium') {
+    document.documentElement.classList.remove('font-size-small', 'font-size-medium', 'font-size-large');
+    const validSize = ['small', 'medium', 'large'].includes(size) ? size : 'medium';
+    document.documentElement.classList.add(`font-size-${validSize}`);
+  }
+
+  setLanguage(newLang) {
+    const lang = (typeof newLang === 'string' && newLang) ? newLang : 'en';
+    this.settings.language = lang;
+    storageManager.saveSettings(this.settings);
+    this.applyLanguage(lang);
+    this.render();
   }
 
   applyLanguage(lang) {
@@ -107,13 +124,7 @@ class GeethaApp {
     const sidebar = renderSidebar(this.currentRoute, {
       lang: this.settings.language,
       onNavigate: (route, params) => this.navigate(route, params),
-      onToggleLang: (newLang) => {
-        const lang = (typeof newLang === 'string' && newLang) ? newLang : 'en';
-        this.settings.language = lang;
-        storageManager.saveSettings(this.settings);
-        this.applyLanguage(lang);
-        this.render();
-      }
+      onToggleLang: (newLang) => this.setLanguage(newLang)
     });
     shell.appendChild(sidebar);
 
@@ -132,18 +143,12 @@ class GeethaApp {
         this.applyTheme(nextTheme);
         this.render();
       },
-      onToggleLang: (newLang) => {
-        // Accept any of the 23 supported languages from LanguageModal
-        const lang = (typeof newLang === 'string' && newLang) ? newLang : 'en';
-        this.settings.language = lang;
-        storageManager.saveSettings(this.settings);
-        this.applyLanguage(lang);
-        this.render();
-      },
+      onToggleLang: (newLang) => this.setLanguage(newLang),
       onToggleMobileMenu: () => {
         openMobileDrawer(this.currentRoute, {
           lang: this.settings.language,
-          onNavigate: (route, params) => this.navigate(route, params)
+          onNavigate: (route, params) => this.navigate(route, params),
+          onToggleLang: (newLang) => this.setLanguage(newLang)
         });
       },
       onNavigate: (route, params) => this.navigate(route, params)
@@ -158,13 +163,17 @@ class GeethaApp {
       lang: this.settings.language,
       theme: this.settings.theme,
       sanskritDisplay: this.settings.sanskritDisplay,
-      fontSize: this.settings.fontSize,
+      fontSize: this.settings.fontSize || 'medium',
       soundEnabled: this.settings.soundEnabled,
       notificationsEnabled: this.settings.notificationsEnabled,
       onNavigate: (route, params) => this.navigate(route, params),
+      onToggleLang: (newLang) => this.setLanguage(newLang),
       onUpdateSettings: (newSettings) => {
         this.settings = newSettings;
         this.applyTheme(newSettings.theme);
+        this.applyLanguage(newSettings.language || 'en');
+        this.applyFontSize(newSettings.fontSize || 'medium');
+        soundSynthesizer.setEnabled(newSettings.soundEnabled);
         this.render();
       },
       ...this.routeParams

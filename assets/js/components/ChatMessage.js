@@ -15,7 +15,9 @@ export function renderChatMessage(message, options = {}) {
     theme = 'light',
     sanskritDisplay = 'devanagari',
     onExplainMore = null,
-    onRelatedVerses = null
+    onRelatedVerses = null,
+    onExploreVerse = null,
+    onNavigate = null
   } = options;
 
   const dict = I18N[lang] || I18N.en;
@@ -174,8 +176,18 @@ export function renderChatMessage(message, options = {}) {
       lang,
       theme,
       sanskritDisplay,
+      showTranslation: true,
       showExplanation: false,
-      showPractical: false
+      showPractical: false,
+      onExploreVerse: (vId) => {
+        soundSynthesizer.playChime();
+        if (onExploreVerse) {
+          onExploreVerse(vId);
+        } else if (onNavigate) {
+          const parts = vId.split('-');
+          onNavigate('verseDetail', { chapterNumber: parseInt(parts[0], 10), verseNumber: parseInt(parts[1], 10) });
+        }
+      }
     });
     verseMount.appendChild(vCard);
   }

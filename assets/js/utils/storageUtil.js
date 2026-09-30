@@ -25,12 +25,69 @@ const DEFAULT_SAVED_VERSES = [
   { verseId: "18-66", savedAt: Date.now() - 3600000 * 5, note: "Surrender all anxieties to the divine and act with courageous peace." }
 ];
 
+const DEFAULT_CHAT_HISTORY = [
+  {
+    id: "chat-default-1",
+    title: "How to focus a restless and wandering mind?",
+    createdAt: Date.now() - 3600000 * 2,
+    timestamp: Date.now() - 3600000 * 2,
+    section: "Today",
+    topic: "Mind Control & Focus",
+    chapterRef: "Chapter 6, Verse 35",
+    messageCount: 2,
+    messages: [
+      { role: "user", text: "How to focus a restless and wandering mind?" },
+      {
+        role: "assistant",
+        text: "The restless mind can be mastered through two divine principles: Abhyasa (consistent practice) and Vairagya (dispassion). Do not fight the mind violently; instead, gently bring it back whenever it wanders.",
+        verse: { id: "6-35", chapter: 6, verse: 35, sanskrit: "असंशयं महाबाहो मनो दुर्निग्रहं चलम् ।\nअभ्यासेन तु कौन्तेय वैराग्येण च गृह्यते ॥", translation: "O mighty-armed son of Kunti, the mind is indeed restless and difficult to curb, but it can be mastered through persistent practice and detachment." }
+      }
+    ]
+  },
+  {
+    id: "chat-default-2",
+    title: "I am afraid of failing my exams.",
+    createdAt: Date.now() - 86400000 * 1.5,
+    timestamp: Date.now() - 86400000 * 1.5,
+    section: "Yesterday",
+    topic: "Overcoming Fear & Anxiety",
+    chapterRef: "Chapter 2, Verse 47",
+    messageCount: 2,
+    messages: [
+      { role: "user", text: "I am afraid of failing my exams." },
+      {
+        role: "assistant",
+        text: "Fear of outcomes creates mental noise that degrades concentration. Your sacred right is to sincere effort and preparation, not attachment to the fruits. Release the anxiety of 'What if I fail' and pour your whole heart into understanding.",
+        verse: { id: "2-47", chapter: 2, verse: 47, sanskrit: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि ॥", translation: "You have a right to perform your prescribed duty, but you are not entitled to the fruits of action." }
+      }
+    ]
+  }
+];
+
 class StorageManager {
+  // Helper: Resolve isolated user key for multi-account support
+  getUserKey(baseKey) {
+    try {
+      const userStr = localStorage.getItem('geetha_gpt_auth_user');
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        const uid = user.uid || user.id || 'guest';
+        return `${baseKey}_${uid}`;
+      }
+    } catch (e) {}
+    return baseKey;
+  }
+
   // Helper: Retrieve item with fallback check for legacy account keys
   getStoredItem(baseKey) {
     try {
-      const data = localStorage.getItem(baseKey);
+      const userKey = this.getUserKey(baseKey);
+      const data = localStorage.getItem(userKey);
       if (data !== null) return data;
+      if (userKey !== baseKey) {
+        const fallbackData = localStorage.getItem(baseKey);
+        if (fallbackData !== null) return fallbackData;
+      }
       // Fallback migration check for data saved under legacy user account keys
       const legacyKey = `${baseKey}_user_account_a`;
       const legacyData = localStorage.getItem(legacyKey);
@@ -209,6 +266,9 @@ class StorageManager {
       if (data) {
         const parsed = JSON.parse(data);
         if (Array.isArray(parsed)) return parsed;
+      }
+      if (data === null) {
+        return DEFAULT_CHAT_HISTORY;
       }
       return [];
     } catch {

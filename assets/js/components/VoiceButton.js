@@ -31,7 +31,7 @@ export function renderVoiceButton(options = {}) {
     uiLang = 'en',
     label = '',
     showLabel = true,
-    variant = 'pill',
+    variant = options.variant || options.buttonStyle || 'pill',
     ariaLabel = '',
     className = ''
   } = options;
@@ -60,6 +60,10 @@ export function renderVoiceButton(options = {}) {
     baseClasses += ' p-2 rounded-xl text-stone-500 hover:text-amber-600 dark:text-stone-400 dark:hover:text-amber-400 hover:bg-amber-500/10';
   } else if (variant === 'outline') {
     baseClasses += ' px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-amber-500/50 text-stone-700 dark:text-stone-300 hover:text-amber-600 text-xs';
+  } else if (variant === 'ghost') {
+    baseClasses += ' px-2.5 py-1 rounded-lg hover:bg-amber-500/10 text-stone-600 dark:text-stone-300 hover:text-amber-700 dark:hover:text-amber-300 text-xs';
+  } else if (variant === 'secondary') {
+    baseClasses += ' px-3 py-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 text-xs';
   }
 
   btn.className = `${baseClasses} ${className}`.trim();

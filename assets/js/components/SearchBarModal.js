@@ -38,6 +38,9 @@ export function openSpotlightSearchModal(options = {}) {
           autofocus
         />
         <kbd class="hidden sm:inline-block px-2 py-0.5 rounded text-[11px] font-mono bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400 border border-stone-200 dark:border-stone-700">ESC</kbd>
+        <button id="close-spotlight-modal" class="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition" aria-label="Close search">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
       </div>
 
       <!-- Results Container -->
@@ -157,7 +160,7 @@ export function openSpotlightSearchModal(options = {}) {
 
       matchedVerses.forEach(v => {
         const item = document.createElement('button');
-        item.className = 'w-full flex items-start gap-3 px-3.5 py-2.5 rounded-xl hover:bg-amber-500/10 text-left transition text-sm text-stone-700 dark:text-stone-200 group';
+        item.className = 'search-result-item w-full flex items-start gap-3 px-3.5 py-2.5 rounded-xl hover:bg-amber-500/10 text-left transition text-sm text-stone-700 dark:text-stone-200 group';
         const trans = (lang === 'te' && v.teluguTranslation) ? v.teluguTranslation : (v.translations && v.translations[lang] ? v.translations[lang] : v.englishTranslation);
         item.innerHTML = `
           <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-800 dark:text-amber-300 font-cinzel font-bold text-xs mt-0.5 whitespace-nowrap">BG ${v.chapter}.${v.verse}</span>
@@ -185,7 +188,7 @@ export function openSpotlightSearchModal(options = {}) {
 
       matchedChapters.forEach(ch => {
         const item = document.createElement('button');
-        item.className = 'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-amber-500/10 text-left transition text-sm text-stone-700 dark:text-stone-200 group';
+        item.className = 'search-result-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-amber-500/10 text-left transition text-sm text-stone-700 dark:text-stone-200 group';
         const chTitle = lang === 'te' ? ch.teluguTitle : (lang === 'hi' && ch.hindiTitle ? ch.hindiTitle : (lang === 'sa' ? ch.sanskritName : ch.englishTitle));
         item.innerHTML = `
           <span class="w-6 h-6 rounded-lg bg-amber-600 text-white font-cinzel font-bold text-xs flex items-center justify-center">${ch.number}</span>
@@ -213,7 +216,7 @@ export function openSpotlightSearchModal(options = {}) {
 
       matchedTopics.forEach(top => {
         const item = document.createElement('button');
-        item.className = 'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-amber-500/10 text-left transition text-sm text-stone-700 dark:text-stone-200 group';
+        item.className = 'search-result-item w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-amber-500/10 text-left transition text-sm text-stone-700 dark:text-stone-200 group';
         const topTitle = lang === 'te' ? top.teluguName : top.name;
         item.innerHTML = `
           <span class="text-amber-600 text-lg">✦</span>
@@ -234,7 +237,7 @@ export function openSpotlightSearchModal(options = {}) {
 
     // Direct Ask Geetha Option
     const askOption = document.createElement('button');
-    askOption.className = 'w-full flex items-center gap-3 px-3.5 py-3 rounded-xl bg-gradient-to-r from-amber-500/15 to-transparent border border-amber-500/30 text-left transition text-sm text-amber-900 dark:text-amber-200 font-semibold mt-3 group';
+    askOption.className = 'search-result-item w-full flex items-center gap-3 px-3.5 py-3 rounded-xl bg-gradient-to-r from-amber-500/15 to-transparent border border-amber-500/30 text-left transition text-sm text-amber-900 dark:text-amber-200 font-semibold mt-3 group';
     const askPrefix = dict.common?.askGeethaAbout || 'Ask Geetha GPT';
     const sendLabel = dict.chat?.send || 'Send Question';
     askOption.innerHTML = `
@@ -274,6 +277,14 @@ export function openSpotlightSearchModal(options = {}) {
       if (firstBtn) firstBtn.click();
     }
   });
+
+  const closeBtn = modal.querySelector('#close-spotlight-modal');
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      soundSynthesizer.playChime();
+      modal.remove();
+    };
+  }
 
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {

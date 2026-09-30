@@ -216,6 +216,13 @@ export function renderAskGeethaPage(options = {}) {
           if (onNavigate && m.verse) {
             onNavigate('chapterDetail', { chapterNumber: m.verse.chapter });
           }
+        },
+        onNavigate: onNavigate,
+        onExploreVerse: (vId) => {
+          if (onNavigate) {
+            const parts = vId.split('-');
+            onNavigate('verseDetail', { chapterNumber: parseInt(parts[0], 10), verseNumber: parseInt(parts[1], 10) });
+          }
         }
       });
       messagesContainer.appendChild(msgNode);

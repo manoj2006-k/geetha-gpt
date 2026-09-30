@@ -176,6 +176,42 @@ export function renderSettingsPage(options = {}) {
           </div>
         </div>
 
+        <!-- 4. Font Size Typography Scaling -->
+        <div class="p-6 rounded-2xl bg-white dark:bg-[#1A1816] border border-stone-200/80 dark:border-stone-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex flex-col gap-1">
+            <h3 class="font-bold text-stone-900 dark:text-stone-100 text-base font-cinzel">
+              ${lang === 'te' ? 'అక్షరాల పరిమాణం' : 'Reading Font Size'}
+            </h3>
+            <p class="text-xs sm:text-sm text-stone-500 dark:text-stone-400 ${lang === 'te' ? 'font-telugu' : ''}">
+              ${lang === 'te' ? 'సౌకర్యవంతమైన పఠనం కోసం ఫాంట్ పరిమాణాన్ని సర్దుబాటు చేయండి' : 'Adjust text scaling for comfortable reading'}
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button class="font-size-opt-btn px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+              currentSettings.fontSize === 'small'
+                ? 'bg-amber-600 text-white shadow-md shadow-amber-600/20'
+                : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700'
+            }" data-size="small">
+              ${lang === 'te' ? 'చిన్నది (A-)' : 'Small (A-)'}
+            </button>
+            <button class="font-size-opt-btn px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+              currentSettings.fontSize === 'medium' || !currentSettings.fontSize
+                ? 'bg-amber-600 text-white shadow-md shadow-amber-600/20'
+                : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700'
+            }" data-size="medium">
+              ${lang === 'te' ? 'సాధారణం (A)' : 'Medium (A)'}
+            </button>
+            <button class="font-size-opt-btn px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+              currentSettings.fontSize === 'large'
+                ? 'bg-amber-600 text-white shadow-md shadow-amber-600/20'
+                : 'bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700'
+            }" data-size="large">
+              ${lang === 'te' ? 'పెద్దది (A+)' : 'Large (A+)'}
+            </button>
+          </div>
+        </div>
+
         <!-- 4. Audio Effects Toggle -->
         <div class="p-6 rounded-2xl bg-white dark:bg-[#1A1816] border border-stone-200/80 dark:border-stone-800 shadow-sm flex items-center justify-between gap-4">
           <div class="flex flex-col gap-1">
@@ -273,6 +309,17 @@ export function renderSettingsPage(options = {}) {
       btn.onclick = () => {
         const newScript = btn.dataset.script;
         currentSettings.sanskritDisplay = newScript;
+        storageManager.saveSettings(currentSettings);
+        soundSynthesizer.playChime();
+        if (onUpdateSettings) onUpdateSettings(currentSettings);
+        renderView();
+      };
+    });
+
+    page.querySelectorAll('.font-size-opt-btn').forEach(btn => {
+      btn.onclick = () => {
+        const newSize = btn.dataset.size;
+        currentSettings.fontSize = newSize;
         storageManager.saveSettings(currentSettings);
         soundSynthesizer.playChime();
         if (onUpdateSettings) onUpdateSettings(currentSettings);
