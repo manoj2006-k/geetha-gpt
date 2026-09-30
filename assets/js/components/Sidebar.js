@@ -47,7 +47,7 @@ export function renderSidebar(currentRoute, options = {}) {
     <!-- Navigation Menu Items -->
     <div class="flex-1 overflow-y-auto px-3 py-2 flex flex-col gap-1">
       <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500 font-cinzel">
-        ${dict.settings ? dict.settings.title : 'Navigation'}
+        Navigation
       </div>
       ${navItems
         .map(item => {
